@@ -1,4 +1,4 @@
-BIN = vcam
+BIN = baobui
 CC = g++
 FLAGS = -Wall -pedantic
 INC = -I common/include
