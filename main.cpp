@@ -36,19 +36,27 @@ int main() {
 
 	/*------------------------------create
 	 * geometry-------------------------------*/
-	GLfloat points[] = { 0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, -0.5f, 0.0f };
+	GLfloat points[] = { 1.0f, -1.0f,  1.0f,
+		                   1.0f,  1.0f,  1.0f,
+											-1.0f, -1.0f,  1.0f,
+										 	-1.0f,  1.0f,  1.0f,
+										 	-1.0f, -1.0f, -1.0f,};
 
-	GLfloat colours[] = { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat colours[] = { 1.0f, 0.0f, 0.0f,
+		                    0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+											  0.0f, 1.0f, 0.0f };
 
 	GLuint points_vbo;
 	glGenBuffers( 1, &points_vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, points_vbo );
-	glBufferData( GL_ARRAY_BUFFER, 9 * sizeof( GLfloat ), points, GL_STATIC_DRAW );
+	glBufferData( GL_ARRAY_BUFFER, 15 * sizeof( GLfloat ), points, GL_STATIC_DRAW );
 
 	GLuint colours_vbo;
 	glGenBuffers( 1, &colours_vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, colours_vbo );
-	glBufferData( GL_ARRAY_BUFFER, 9 * sizeof( GLfloat ), colours, GL_STATIC_DRAW );
+	glBufferData( GL_ARRAY_BUFFER, 15 * sizeof( GLfloat ), colours, GL_STATIC_DRAW );
 
 	GLuint vao;
 	glGenVertexArrays( 1, &vao );
@@ -148,9 +156,9 @@ int main() {
 	/*------------------------------rendering
 	 * loop--------------------------------*/
 	/* some rendering defaults */
-	glEnable( GL_CULL_FACE ); // cull face
-	glCullFace( GL_BACK );		// cull back face
-	glFrontFace( GL_CW );			// GL_CCW for counter clock-wise
+	//glEnable( GL_CULL_FACE ); // cull face
+	//glCullFace( GL_BACK );		// cull back face
+	// glFrontFace( GL_CW );			// GL_CCW for counter clock-wise
 
 	while ( !glfwWindowShouldClose( g_window ) ) {
 		static double previous_seconds = glfwGetTime();
@@ -166,7 +174,7 @@ int main() {
 		glUseProgram( shader_programme );
 		glBindVertexArray( vao );
 		// draw points 0-3 from the currently bound VAO with current in-use shader
-		glDrawArrays( GL_TRIANGLES, 0, 3 );
+		glDrawArrays( GL_TRIANGLE_STRIP, 0, 5 );
 		// update other events like input handling
 		glfwPollEvents();
 
