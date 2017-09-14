@@ -1,13 +1,10 @@
+BIN = vcam
 CC = g++
-CFLAGS = -Wall -Werror -pedantic -std=c++11
-SOURCES = $(wildcard *.cpp)
-OBJS = $(SOURCES: .cpp=.o)
-PROG = exe
+FLAGS = -Wall -pedantic
+INC = -I ../common/include
+LOC_LIB = ../common/linux_x86_64/libGLEW.a -lglfw
+SYS_LIB = -lGL
+SRC = main.cpp gl_utils.cpp maths_funcs.cpp
 
-all: $(PROG)
-
-$(PROG): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@
-
-clean:
-	rm -f *~ *.o *.gch $(PROG)
+all:
+	${CC} ${FLAGS} -o ${BIN} ${SRC} ${INC} ${LOC_LIB} ${SYS_LIB}
