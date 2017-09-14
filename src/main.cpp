@@ -9,8 +9,8 @@
 | Virtual Camera - create and modify VIEW and PROJECTION matrices              |
 | keyboard controls: W,S,A,D,left and right arrows                             |
 \******************************************************************************/
-#include "gl_utils.h"
-#include "maths_funcs.h"
+#include "utils/gl_utils.h"
+#include "math/maths_funcs.h"
 #include <GL/glew.h>		// include GLEW and new version of GL on Windows
 #include <GLFW/glfw3.h> // GLFW helper library
 #include <assert.h>
@@ -36,19 +36,91 @@ int main() {
 
 	/*------------------------------create
 	 * geometry-------------------------------*/
-	GLfloat points[] = { 0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, -0.5f, 0.0f };
+	GLfloat points[] = {
+    -1.0f,-1.0f,-1.0f, // triangle 1 : begin
+    -1.0f,-1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f, // triangle 1 : end
+    1.0f, 1.0f,-1.0f, // triangle 2 : begin
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f,-1.0f, // triangle 2 : end
+    1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    -1.0f,-1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f,-1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f
+};
 
-	GLfloat colours[] = { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat colours[] = { 1.0f, 0.0f, 0.0f,
+		                    0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+		                    0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f };
 
 	GLuint points_vbo;
 	glGenBuffers( 1, &points_vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, points_vbo );
-	glBufferData( GL_ARRAY_BUFFER, 9 * sizeof( GLfloat ), points, GL_STATIC_DRAW );
+	glBufferData( GL_ARRAY_BUFFER, 12*3*3 * sizeof( GLfloat ), points, GL_STATIC_DRAW );
 
 	GLuint colours_vbo;
 	glGenBuffers( 1, &colours_vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, colours_vbo );
-	glBufferData( GL_ARRAY_BUFFER, 9 * sizeof( GLfloat ), colours, GL_STATIC_DRAW );
+	glBufferData( GL_ARRAY_BUFFER, 12*3*3 * sizeof( GLfloat ), colours, GL_STATIC_DRAW );
 
 	GLuint vao;
 	glGenVertexArrays( 1, &vao );
@@ -64,8 +136,8 @@ int main() {
 	 * shaders--------------------------------*/
 	char vertex_shader[1024 * 256];
 	char fragment_shader[1024 * 256];
-	parse_file_into_str( "test_vs.glsl", vertex_shader, 1024 * 256 );
-	parse_file_into_str( "test_fs.glsl", fragment_shader, 1024 * 256 );
+	parse_file_into_str( "assets/test_vs.glsl", vertex_shader, 1024 * 256 );
+	parse_file_into_str( "assets/test_fs.glsl", fragment_shader, 1024 * 256 );
 
 	GLuint vs = glCreateShader( GL_VERTEX_SHADER );
 	const GLchar *p = (const GLchar *)vertex_shader;
@@ -130,7 +202,7 @@ int main() {
 	float cam_speed = 1.0f;			 // 1 unit per second
 	float cam_yaw_speed = 10.0f; // 10 degrees per second
 	float cam_pos[] = { 0.0f, 0.0f,
-											2.0f }; // don't start at zero, or we will be too close
+											4.0f }; // don't start at zero, or we will be too close
 	float cam_yaw = 0.0f;				// y-rotation in degrees
 	mat4 T =
 		translate( identity_mat4(), vec3( -cam_pos[0], -cam_pos[1], -cam_pos[2] ) );
@@ -148,9 +220,14 @@ int main() {
 	/*------------------------------rendering
 	 * loop--------------------------------*/
 	/* some rendering defaults */
-	glEnable( GL_CULL_FACE ); // cull face
-	glCullFace( GL_BACK );		// cull back face
-	glFrontFace( GL_CW );			// GL_CCW for counter clock-wise
+	//glEnable( GL_CULL_FACE ); // cull face
+	//glCullFace( GL_BACK );		// cull back face
+	//glFrontFace( GL_CW );			// GL_CCW for counter clock-wise
+
+	// Enable depth test
+	glEnable(GL_DEPTH_TEST);
+	// Accept fragment if it closer to the camera than the former one
+	glDepthFunc(GL_LESS);
 
 	while ( !glfwWindowShouldClose( g_window ) ) {
 		static double previous_seconds = glfwGetTime();
@@ -166,7 +243,7 @@ int main() {
 		glUseProgram( shader_programme );
 		glBindVertexArray( vao );
 		// draw points 0-3 from the currently bound VAO with current in-use shader
-		glDrawArrays( GL_TRIANGLES, 0, 3 );
+		glDrawArrays( GL_TRIANGLES, 0, 12*3 );
 		// update other events like input handling
 		glfwPollEvents();
 

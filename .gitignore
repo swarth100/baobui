@@ -1,0 +1,8 @@
+# Ignore debug log files
+*.log
+
+# Ignore object files and executable
+*.o
+baobui
+
+# End
