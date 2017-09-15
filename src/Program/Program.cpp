@@ -32,6 +32,7 @@ void Program::draw() {
 
     /* For each component bind the relevant VAO and draw */
     glBindVertexArray(component->getVao());
+    // glDrawArrays(component->getType(), 0, component->getSize());
     glDrawArrays(component->getType(), 0, component->getSize());
   }
 }
@@ -39,6 +40,12 @@ void Program::draw() {
 /* */
 void Program::generatePrism() {
   shared_ptr<Component> component = make_shared<Prism>(1, 2, 3, make_shared<Point>(0, 0, 0));
+
+  componentList.push_back(component);
+}
+
+void Program::generateLine() {
+  shared_ptr<Component> component = make_shared<Line>(make_shared<Point>(0, 0, 0), make_shared<Point>(1, 1, 1));
 
   componentList.push_back(component);
 }

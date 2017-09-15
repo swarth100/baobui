@@ -3,9 +3,11 @@
 /* Public */
 
 /* */
-Line::Line(shared_ptr<Point> start, shared_ptr<Point> end) {
+Line::Line(shared_ptr<Point> start, shared_ptr<Point> end) : Component() {
   this->start = start;
   this->end = end;
+
+  this->getLine();
 }
 
 /* Private */
@@ -17,5 +19,5 @@ void Line::getLine() {
       end->x,   end->y,   end->z,
   };
 
-  this->Component::addVbo2(points, 1);
+  this->Component::addVbo2(points, 2);
 }

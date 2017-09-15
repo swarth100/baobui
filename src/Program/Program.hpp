@@ -4,6 +4,7 @@
 #include "../Util/Util.hpp"
 #include "../Component/Component.hpp"
 #include "../Component/Prism.hpp"
+#include "../Component/Line.hpp"
 
 class Program {
 public:
@@ -15,6 +16,8 @@ public:
 
   void generatePrism();
   void generateColouredPrism();
+
+  void generateLine();
 
 protected:
 

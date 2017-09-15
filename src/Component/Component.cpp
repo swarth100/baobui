@@ -53,7 +53,7 @@ void Component::addVbo(GLfloat* array, int size, int VboType) {
 
 	glBindVertexArray(this->vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vboElem->getVbo());
-	glVertexAttribPointer(this->index, VboType, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(this->index, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(this->index);
 
   this->index = this->index + 1;
