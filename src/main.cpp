@@ -203,38 +203,7 @@ int main() {
 
 	/* -------------- */
 
-	shared_ptr<Program> program2 = make_shared<Program>("assets/test2_vs.glsl",  "assets/test_fs.glsl");
-
-	/*
-	char vertex2_shader[1024 * 256];
-	parse_file_into_str( "assets/test2_vs.glsl", vertex2_shader, 1024 * 256 );
-
-	GLuint vs2 = glCreateShader( GL_VERTEX_SHADER );
-	p = (const GLchar *)vertex2_shader;
-	glShaderSource( vs2, 1, &p, NULL );
-	glCompileShader( vs2 );
-
-	// check for compile errors
-	params = -1;
-	glGetShaderiv( vs, GL_COMPILE_STATUS, &params );
-	if ( GL_TRUE != params ) {
-		fprintf( stderr, "ERROR: GL shader index %i did not compile\n", vs );
-		print_shader_info_log( vs2 );
-		return 1; // or exit or something
-	}
-
-	GLuint shader_programme2 = glCreateProgram();
-	glAttachShader( shader_programme2, fs );
-	glAttachShader( shader_programme2, vs2 );
-	glLinkProgram( shader_programme2 );
-
-	glGetProgramiv( shader_programme2, GL_LINK_STATUS, &params );
-	if ( GL_TRUE != params ) {
-		fprintf( stderr, "ERROR: could not link shader programme GL index %i\n",
-						 shader_programme2 );
-		print_programme_info_log( shader_programme2 );
-		return false;
-	} */
+	shared_ptr<Program> program2 = make_shared<Program>("assets/test2_vs.glsl",  "assets/test_fs.glsl", vao2);
 
 	/*--------------------------create camera
 	 * matrices----------------------------*/
@@ -274,16 +243,6 @@ int main() {
 	glUniformMatrix4fv( view_mat_location, 1, GL_FALSE, view_mat.m );
 	glUniformMatrix4fv( proj_mat_location, 1, GL_FALSE, proj_mat );
 
-	/*
-	GLint view_mat_location2 = glGetUniformLocation( shader_programme2, "view" );
-	GLint proj_mat_location2 = glGetUniformLocation( shader_programme2, "proj" );
-
-	glUseProgram( shader_programme2 );
-	glUniformMatrix4fv( view_mat_location2, 1, GL_FALSE, view_mat.m );
-	glUniformMatrix4fv( proj_mat_location2, 1, GL_FALSE, proj_mat );
-
-	*/
-
 	program2->attachUniform("view", view_mat.m);
 	program2->attachUniform("proj", proj_mat);
 
@@ -319,6 +278,9 @@ int main() {
 		//glBindVertexArray( vao2 );
 		// draw points 0-3 from the currently bound VAO with current in-use shader
 		//glDrawArrays( GL_TRIANGLES, 0, 3 );
+
+		program2->draw();
+
 		// update other events like input handling
 		glfwPollEvents();
 
@@ -367,8 +329,7 @@ int main() {
 			glUseProgram( shader_programme );
 			glUniformMatrix4fv( view_mat_location, 1, GL_FALSE, view_mat.m );
 
-			//glUseProgram( shader_programme2 );
-			//glUniformMatrix4fv( view_mat_location2, 1, GL_FALSE, view_mat.m );
+			program2->attachUniform("view", view_mat.m);
 		}
 
 		if ( GLFW_PRESS == glfwGetKey( g_window, GLFW_KEY_ESCAPE ) ) {

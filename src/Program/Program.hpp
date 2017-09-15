@@ -5,15 +5,19 @@
 
 class Program {
 public:
-  Program(const char* vertex_shader, const char* fragment_shader);
+  Program(const char* vertex_shader, const char* fragment_shader, GLuint vao);
 
   void attachUniform(const char* name, const GLfloat* value);
+
+  void draw();
 
 protected:
 
 private:
   const char* vertex_shader;
   const char* fragment_shader;
+
+  GLuint vao;
 
   GLuint shader_programme;
   GLuint vs_Ref;

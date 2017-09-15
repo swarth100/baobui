@@ -3,9 +3,10 @@
 /* Public */
 
 /* */
-Program::Program(const char* vertex_shader, const char* fragment_shader) {
+Program::Program(const char* vertex_shader, const char* fragment_shader, GLuint vao) {
   this->vertex_shader = vertex_shader;
   this->fragment_shader = fragment_shader;
+  this->vao = vao;
   this->shader_programme = glCreateProgram();
 
   this->compileAllShaders();
@@ -21,6 +22,13 @@ void Program::attachUniform(const char* name, const GLfloat* value) {
   glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, value);
 }
 
+void Program::draw() {
+  glUseProgram(this->shader_programme);
+  glBindVertexArray(this->vao);
+
+  glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
 /* Private */
 
 /* */
@@ -33,8 +41,11 @@ void Program::compileAllShaders() {
 }
 
 GLuint Program::compileShader(const char* shader, GLenum shaderType) {
-  GLuint shaderInt = glCreateShader( shaderType );
-	const GLchar *shaderChar = (const GLchar *)shader;
+  char shaderBuff[1024 * 256];
+	parse_file_into_str(shader, shaderBuff, 1024 * 256 );
+
+  GLuint shaderInt = glCreateShader(shaderType);
+	const GLchar *shaderChar = (const GLchar *)shaderBuff;
 	glShaderSource( shaderInt, 1, &shaderChar, NULL );
 	glCompileShader( shaderInt );
 
