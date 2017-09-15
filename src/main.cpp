@@ -9,8 +9,6 @@
 | Virtual Camera - create and modify VIEW and PROJECTION matrices              |
 | keyboard controls: W,S,A,D,left and right arrows                             |
 \******************************************************************************/
-#include "utils/gl_utils.h"
-#include "math/maths_funcs.h"
 #include <GL/glew.h>		// include GLEW and new version of GL on Windows
 #include <GLFW/glfw3.h> // GLFW helper library
 #include <assert.h>
@@ -19,14 +17,29 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 #define _USE_MATH_DEFINES
 #include <math.h>
+
+#include "Util/gl_utils.h"
+#include "Util/Util.hpp"
+#include "Math/maths_funcs.h"
+#include "Component/Component.hpp"
+#include "Component/Grid.hpp"
+#include "Component/Prism.hpp"
+#include "Geometry/Point.hpp"
+
 #define GL_LOG_FILE "gl.log"
+
+using namespace std;
 
 // keep track of window size for things like the viewport and the mouse cursor
 int g_gl_width = 640;
 int g_gl_height = 480;
 GLFWwindow *g_window = NULL;
+
+/* List of initialised components to be rendered */
+list<shared_ptr<Component>> components;
 
 int main() {
 	restart_gl_log();

@@ -1,0 +1,23 @@
+#ifndef PRISM_H
+#define PRISM_H
+
+#include "Component.hpp"
+#include "../Util/Util.hpp"
+#include "../Geometry/Point.hpp"
+
+/* A Prism is a subClass of a Component */
+class Prism : public Component {
+public:
+  Prism(int width, int height, int depth, shared_ptr<Point> center);
+
+protected:
+
+private:
+  /* Every Prism must be defined according to its 3D dimensions */
+  int width, height, depth;
+
+  /* A Point object indicates the Prism's center */
+  shared_ptr<Point> center;
+};
+
+#endif
