@@ -1,18 +1,8 @@
-/******************************************************************************\
-| OpenGL 4 Example Code.                                                       |
-| Accompanies written series "Anton's OpenGL 4 Tutorials"                      |
-| Email: anton at antongerdelan dot net                                        |
-| First version 27 Jan 2014                                                    |
-| Copyright Dr Anton Gerdelan, Trinity College Dublin, Ireland.                |
-| See individual libraries for separate legal notices                          |
-|******************************************************************************|
-| Virtual Camera - create and modify VIEW and PROJECTION matrices              |
-| keyboard controls: W,S,A,D,left and right arrows                             |
-\******************************************************************************/
 #define _USE_MATH_DEFINES
 #include <math.h>
 
 #include "Util/Util.hpp"
+#include "Util/program_utils.hpp"
 #include "Math/maths_funcs.h"
 #include "Component/Component.hpp"
 #include "Component/Grid.hpp"
@@ -29,38 +19,23 @@ int g_gl_width = 640;
 int g_gl_height = 480;
 GLFWwindow *g_window = NULL;
 
-/* List of initialised components to be rendered */
-list<shared_ptr<Component>> components;
-
 int main() {
 	restart_gl_log();
-	/*------------------------------start GL
-	 * context------------------------------*/
+
+	/* Start GL context */
 	start_gl();
 
-	/*------------------------------create
-	 * geometry-------------------------------*/
-
-	 /*
-
-
-	shared_ptr<Component> component = make_shared<Prism>(1, 1, 1, make_shared<Point>(0, 0, 0));
-	component->addVbo(colours, 36);
-
-	shared_ptr<Component> component2 = make_shared<Prism>(3, 2, 1, make_shared<Point>(0, 0, 0));
-
-	*/
-	/*------------------------------create
-	 * shaders--------------------------------*/
-	shared_ptr<Program> program1 = make_shared<Program>(
+	/* Initialise Program for textured Objects */
+	shared_ptr<Program> texturedProgram = initProgram(
 		"assets/test_vs.glsl",  "assets/test_fs.glsl");
 
-	program1->generateColouredPrism();
+	texturedProgram->generateColouredPrism();
 
-	shared_ptr<Program> program2 = make_shared<Program>(
+	/* Initialise Program for blank objects. Templates and/or Grid */
+	shared_ptr<Program> untexturedProgram = initProgram(
 		"assets/test2_vs.glsl",  "assets/test_fs.glsl");
 
-	program2->generatePrism();
+	untexturedProgram->generatePrism();
 
 	/*--------------------------create camera
 	 * matrices----------------------------*/
@@ -92,11 +67,9 @@ int main() {
 	mat4 R = rotate_y_deg( identity_mat4(), -cam_yaw );
 	mat4 view_mat = R * T;
 
-	program1->attachUniform("view", view_mat.m);
-	program1->attachUniform("proj", proj_mat);
-
-	program2->attachUniform("view", view_mat.m);
-	program2->attachUniform("proj", proj_mat);
+	/* Attach the newly created uniforms to all programs */
+	attachUniforms("view", view_mat.m);
+	attachUniforms("proj", proj_mat);
 
 	/*------------------------------rendering
 	 * loop--------------------------------*/
@@ -121,14 +94,7 @@ int main() {
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		glViewport( 0, 0, g_gl_width, g_gl_height );
 
-		//glUseProgram( shader_programme );
-		//glBindVertexArray( vao );
-		// draw points 0-3 from the currently bound VAO with current in-use shader
-		//glDrawArrays( GL_TRIANGLES, 0, 12*3 );
-
-		program1->draw();
-
-		program2->draw();
+		drawAllPrograms();
 
 		// update other events like input handling
 		glfwPollEvents();
@@ -176,8 +142,8 @@ int main() {
 			mat4 R = rotate_y_deg( identity_mat4(), -cam_yaw );					//
 			mat4 view_mat = R * T;
 
-			program1->attachUniform("view", view_mat.m);
-			program2->attachUniform("view", view_mat.m);
+			/* Update the uniforms attached to the various programs */
+			attachUniforms("view", view_mat.m);
 		}
 
 		if ( GLFW_PRESS == glfwGetKey( g_window, GLFW_KEY_ESCAPE ) ) {
