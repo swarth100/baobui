@@ -12,13 +12,13 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include "Util/gl_utils.h"
 #include "Util/Util.hpp"
 #include "Math/maths_funcs.h"
 #include "Component/Component.hpp"
 #include "Component/Grid.hpp"
 #include "Component/Prism.hpp"
 #include "Geometry/Point.hpp"
+#include "Program/Program.hpp"
 
 #define GL_LOG_FILE "gl.log"
 
@@ -203,6 +203,9 @@ int main() {
 
 	/* -------------- */
 
+	shared_ptr<Program> program2 = make_shared<Program>("assets/test2_vs.glsl",  "assets/test_fs.glsl");
+
+	/*
 	char vertex2_shader[1024 * 256];
 	parse_file_into_str( "assets/test2_vs.glsl", vertex2_shader, 1024 * 256 );
 
@@ -231,7 +234,7 @@ int main() {
 						 shader_programme2 );
 		print_programme_info_log( shader_programme2 );
 		return false;
-	}
+	} */
 
 	/*--------------------------create camera
 	 * matrices----------------------------*/
@@ -271,12 +274,18 @@ int main() {
 	glUniformMatrix4fv( view_mat_location, 1, GL_FALSE, view_mat.m );
 	glUniformMatrix4fv( proj_mat_location, 1, GL_FALSE, proj_mat );
 
+	/*
 	GLint view_mat_location2 = glGetUniformLocation( shader_programme2, "view" );
 	GLint proj_mat_location2 = glGetUniformLocation( shader_programme2, "proj" );
 
 	glUseProgram( shader_programme2 );
 	glUniformMatrix4fv( view_mat_location2, 1, GL_FALSE, view_mat.m );
 	glUniformMatrix4fv( proj_mat_location2, 1, GL_FALSE, proj_mat );
+
+	*/
+
+	program2->attachUniform("view", view_mat.m);
+	program2->attachUniform("proj", proj_mat);
 
 	/*------------------------------rendering
 	 * loop--------------------------------*/
@@ -306,10 +315,10 @@ int main() {
 		// draw points 0-3 from the currently bound VAO with current in-use shader
 		glDrawArrays( GL_TRIANGLES, 0, 12*3 );
 
-		glUseProgram( shader_programme2 );
-		glBindVertexArray( vao2 );
+		//glUseProgram( shader_programme2 );
+		//glBindVertexArray( vao2 );
 		// draw points 0-3 from the currently bound VAO with current in-use shader
-		glDrawArrays( GL_TRIANGLES, 0, 3 );
+		//glDrawArrays( GL_TRIANGLES, 0, 3 );
 		// update other events like input handling
 		glfwPollEvents();
 
@@ -358,8 +367,8 @@ int main() {
 			glUseProgram( shader_programme );
 			glUniformMatrix4fv( view_mat_location, 1, GL_FALSE, view_mat.m );
 
-			glUseProgram( shader_programme2 );
-			glUniformMatrix4fv( view_mat_location, 1, GL_FALSE, view_mat.m );
+			//glUseProgram( shader_programme2 );
+			//glUniformMatrix4fv( view_mat_location2, 1, GL_FALSE, view_mat.m );
 		}
 
 		if ( GLFW_PRESS == glfwGetKey( g_window, GLFW_KEY_ESCAPE ) ) {

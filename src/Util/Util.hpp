@@ -19,6 +19,8 @@
 #include <string.h>
 #include <numeric>
 
+#include "gl_utils.h"
+
 using namespace std;
 
 #endif
