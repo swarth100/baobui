@@ -60,5 +60,5 @@ void Prism::getPrism(float width, float height, float depth, shared_ptr<Point> c
     width, 0.0f, depth
   };
 
-  this->Component::addVbo(points, 36);
+  this->Component::addVbo3(points, 36);
 }

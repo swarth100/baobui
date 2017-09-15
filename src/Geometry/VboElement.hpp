@@ -15,6 +15,8 @@ private:
   GLuint vbo;
   int vboSize;
 
+
+
 };
 
 #endif

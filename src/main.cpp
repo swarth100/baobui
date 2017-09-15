@@ -5,7 +5,7 @@
 #include "Util/program_utils.hpp"
 #include "Math/maths_funcs.h"
 #include "Component/Component.hpp"
-#include "Component/Grid.hpp"
+#include "Component/Line.hpp"
 #include "Component/Prism.hpp"
 #include "Geometry/Point.hpp"
 #include "Program/Program.hpp"

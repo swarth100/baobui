@@ -32,7 +32,7 @@ void Program::draw() {
 
     /* For each component bind the relevant VAO and draw */
     glBindVertexArray(component->getVao());
-    glDrawArrays(GL_TRIANGLES, 0, component->getSize());
+    glDrawArrays(component->getType(), 0, component->getSize());
   }
 }
 
@@ -84,7 +84,7 @@ void Program::generateColouredPrism() {
 												0.0f, 0.0f, 1.0f };
 
   shared_ptr<Component> component = make_shared<Prism>(3, 2, 1, make_shared<Point>(0, 0, 0));
-  component->addVbo(colours, 36);
+  component->addVbo3(colours, 36);
 
   componentList.push_back(component);
 }

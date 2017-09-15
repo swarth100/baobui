@@ -11,8 +11,6 @@ public:
   Prism();
   Prism(float width, float height, float depth, shared_ptr<Point> center);
 
-protected:
-
 private:
   /* Every Prism must be defined according to its 3D dimensions */
   float width, height, depth;

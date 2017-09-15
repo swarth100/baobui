@@ -2,14 +2,10 @@
 #define POINT_H
 
 class Point {
-private:
-  /* Coordinates held by a Point instance */
-  int x, y, z;
-
-protected:
-
 public:
-  Point (int x, int y, int z);
+  float x, y, z;
+
+  Point (float x, float y, float z);
 };
 
 #endif
