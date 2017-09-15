@@ -40,6 +40,7 @@ void Program::compileAllShaders() {
   this->checkShaderCompilation(fs_Ref);
 }
 
+/* */
 GLuint Program::compileShader(const char* shader, GLenum shaderType) {
   char shaderBuff[1024 * 256];
 	parse_file_into_str(shader, shaderBuff, 1024 * 256 );
@@ -52,6 +53,7 @@ GLuint Program::compileShader(const char* shader, GLenum shaderType) {
   return shaderInt;
 }
 
+/* */
 void Program::checkLinkStatus() {
   glAttachShader(this->shader_programme, this->fs_Ref);
   glAttachShader(this->shader_programme, this->vs_Ref);
@@ -68,6 +70,7 @@ void Program::checkLinkStatus() {
 	}
 }
 
+/* */
 void Program::checkShaderCompilation(GLuint shaderInt) {
   int debugParams = -1;
 	glGetShaderiv( shaderInt, GL_COMPILE_STATUS, &debugParams );

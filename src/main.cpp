@@ -142,6 +142,7 @@ int main() {
     -3.0f, 3.0f, 3.0f, // triangle 1 : end
 	};
 
+	/*
 	GLuint points2_vbo;
 	glGenBuffers( 1, &points2_vbo );
 	glBindBuffer( GL_ARRAY_BUFFER, points2_vbo );
@@ -152,13 +153,16 @@ int main() {
 	glBindVertexArray( vao2 );
 	glBindBuffer( GL_ARRAY_BUFFER, points2_vbo );
 	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, NULL );
-	glEnableVertexAttribArray( 0 );
+	glEnableVertexAttribArray( 0 ); */
+
+	shared_ptr<Component> component = make_shared<Component>();
+	component->addVbo(points2, 3);
 
 	/*------------------------------create
 	 * shaders--------------------------------*/
 	shared_ptr<Program> program1 = make_shared<Program>("assets/test_vs.glsl",  "assets/test_fs.glsl", vao);
 
-	shared_ptr<Program> program2 = make_shared<Program>("assets/test2_vs.glsl",  "assets/test_fs.glsl", vao2);
+	shared_ptr<Program> program2 = make_shared<Program>("assets/test2_vs.glsl",  "assets/test_fs.glsl", component->getVao());
 
 	/*--------------------------create camera
 	 * matrices----------------------------*/
