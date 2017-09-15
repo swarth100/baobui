@@ -9,15 +9,6 @@
 | Virtual Camera - create and modify VIEW and PROJECTION matrices              |
 | keyboard controls: W,S,A,D,left and right arrows                             |
 \******************************************************************************/
-#include <GL/glew.h>		// include GLEW and new version of GL on Windows
-#include <GLFW/glfw3.h> // GLFW helper library
-#include <assert.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -145,6 +136,27 @@ int main() {
 	glEnableVertexAttribArray( 0 );
 	glEnableVertexAttribArray( 1 );
 
+	GLfloat points2[] = {
+    -3.0f,-3.0f,-3.0f, // triangle 1 : begin
+    -3.0f,-3.0f, 3.0f,
+    -3.0f, 3.0f, 3.0f, // triangle 1 : end
+	};
+
+	GLuint points2_vbo;
+	glGenBuffers( 1, &points2_vbo );
+	glBindBuffer( GL_ARRAY_BUFFER, points2_vbo );
+	glBufferData( GL_ARRAY_BUFFER, 3*3 * sizeof( GLfloat ), points2, GL_STATIC_DRAW );
+
+	GLuint vao2;
+	glGenVertexArrays( 1, &vao2 );
+	glBindVertexArray( vao2 );
+	glBindBuffer( GL_ARRAY_BUFFER, points2_vbo );
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, NULL );
+	glBindBuffer( GL_ARRAY_BUFFER, colours_vbo );
+	glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 0, NULL );
+	glEnableVertexAttribArray( 0 );
+	glEnableVertexAttribArray( 1 );
+
 	/*------------------------------create
 	 * shaders--------------------------------*/
 	char vertex_shader[1024 * 256];
@@ -257,6 +269,10 @@ int main() {
 		glBindVertexArray( vao );
 		// draw points 0-3 from the currently bound VAO with current in-use shader
 		glDrawArrays( GL_TRIANGLES, 0, 12*3 );
+
+		glBindVertexArray( vao2 );
+		// draw points 0-3 from the currently bound VAO with current in-use shader
+		glDrawArrays( GL_TRIANGLES, 0, 3 );
 		// update other events like input handling
 		glfwPollEvents();
 
