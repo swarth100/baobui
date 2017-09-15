@@ -15,7 +15,7 @@ public:
 
 protected:
   int index = 0;
-  int size;
+  int size = 0;
 
   GLuint vao;
 

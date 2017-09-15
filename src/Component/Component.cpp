@@ -28,7 +28,5 @@ void Component::addVbo(GLfloat* array, int size) {
 	glVertexAttribPointer(this->index, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(this->index);
 
-  printf("Index: %i\n", this->index);
-
   this->index = this->index + 1;
 }

@@ -40,44 +40,6 @@ int main() {
 
 	/*------------------------------create
 	 * geometry-------------------------------*/
-	GLfloat points[] = {
-    -1.0f,-1.0f,-1.0f, // triangle 1 : begin
-    -1.0f,-1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f, // triangle 1 : end
-    1.0f, 1.0f,-1.0f, // triangle 2 : begin
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f,-1.0f, // triangle 2 : end
-    1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    -1.0f,-1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f,-1.0f,
-    -1.0f, 1.0f,-1.0f,
-    1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f
-};
 
 	GLfloat colours[] = { 1.0f, 0.0f, 0.0f,
 		                    0.0f, 1.0f, 0.0f,
@@ -116,39 +78,11 @@ int main() {
 												0.0f, 1.0f, 0.0f,
 												0.0f, 0.0f, 1.0f };
 
-	/*
-	GLuint points_vbo;
-	glGenBuffers( 1, &points_vbo );
-	glBindBuffer( GL_ARRAY_BUFFER, points_vbo );
-	glBufferData( GL_ARRAY_BUFFER, 12*3*3 * sizeof( GLfloat ), points, GL_STATIC_DRAW );
-
-	GLuint colours_vbo;
-	glGenBuffers( 1, &colours_vbo );
-	glBindBuffer( GL_ARRAY_BUFFER, colours_vbo );
-	glBufferData( GL_ARRAY_BUFFER, 12*3*3 * sizeof( GLfloat ), colours, GL_STATIC_DRAW );
-
-	GLuint vao;
-	glGenVertexArrays( 1, &vao );
-	glBindVertexArray( vao );
-	glBindBuffer( GL_ARRAY_BUFFER, points_vbo );
-	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, NULL );
-	glBindBuffer( GL_ARRAY_BUFFER, colours_vbo );
-	glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 0, NULL );
-	glEnableVertexAttribArray( 0 );
-	glEnableVertexAttribArray( 1 ); */
-
-	shared_ptr<Component> component = make_shared<Component>();
-	component->addVbo(points, 36);
+	shared_ptr<Component> component = make_shared<Prism>(1, 2, 3, make_shared<Point>(0, 0, 0));
+	// component->addVbo(points, 36);
 	component->addVbo(colours, 36);
 
-	GLfloat points2[] = {
-    -3.0f,-3.0f,-3.0f, // triangle 1 : begin
-    -3.0f,-3.0f, 3.0f,
-    -3.0f, 3.0f, 3.0f, // triangle 1 : end
-	};
-
-	shared_ptr<Component> component2 = make_shared<Component>();
-	component2->addVbo(points2, 3);
+	shared_ptr<Component> component2 = make_shared<Prism>(3, 2, 1, make_shared<Point>(0, 0, 0));
 
 	/*------------------------------create
 	 * shaders--------------------------------*/

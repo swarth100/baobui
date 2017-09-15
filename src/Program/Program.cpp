@@ -22,6 +22,7 @@ void Program::attachUniform(const char* name, const GLfloat* value) {
   glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, value);
 }
 
+/* */
 void Program::draw() {
   glUseProgram(this->shader_programme);
   glBindVertexArray(this->component->getVao());
