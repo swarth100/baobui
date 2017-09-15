@@ -3,10 +3,10 @@
 /* Public */
 
 /* */
-Program::Program(const char* vertex_shader, const char* fragment_shader, GLuint vao) {
+Program::Program(const char* vertex_shader, const char* fragment_shader, shared_ptr<Component> component) {
   this->vertex_shader = vertex_shader;
   this->fragment_shader = fragment_shader;
-  this->vao = vao;
+  this->component = component;
   this->shader_programme = glCreateProgram();
 
   this->compileAllShaders();
@@ -24,9 +24,9 @@ void Program::attachUniform(const char* name, const GLfloat* value) {
 
 void Program::draw() {
   glUseProgram(this->shader_programme);
-  glBindVertexArray(this->vao);
+  glBindVertexArray(this->component->getVao());
 
-  glDrawArrays(GL_TRIANGLES, 0, 3);
+  glDrawArrays(GL_TRIANGLES, 0, this->component->getSize());
 }
 
 /* Private */

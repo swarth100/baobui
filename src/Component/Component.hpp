@@ -6,12 +6,16 @@
 
 class Component {
 public:
+  Component();
+
   GLuint getVao ();
+  int getSize();
 
   void addVbo(GLfloat* array, int size);
 
 protected:
   int index = 0;
+  int size;
 
   GLuint vao;
 

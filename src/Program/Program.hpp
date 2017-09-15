@@ -2,10 +2,11 @@
 #define PROGRAM_H
 
 #include "../Util/Util.hpp"
+#include "../Component/Component.hpp"
 
 class Program {
 public:
-  Program(const char* vertex_shader, const char* fragment_shader, GLuint vao);
+  Program(const char* vertex_shader, const char* fragment_shader, shared_ptr<Component> component);
 
   void attachUniform(const char* name, const GLfloat* value);
 
@@ -17,7 +18,7 @@ private:
   const char* vertex_shader;
   const char* fragment_shader;
 
-  GLuint vao;
+  shared_ptr<Component> component;
 
   GLuint shader_programme;
   GLuint vs_Ref;
