@@ -156,52 +156,7 @@ int main() {
 
 	/*------------------------------create
 	 * shaders--------------------------------*/
-	char vertex_shader[1024 * 256];
-	char fragment_shader[1024 * 256];
-	parse_file_into_str( "assets/test_vs.glsl", vertex_shader, 1024 * 256 );
-	parse_file_into_str( "assets/test_fs.glsl", fragment_shader, 1024 * 256 );
-
-	GLuint vs = glCreateShader( GL_VERTEX_SHADER );
-	const GLchar *p = (const GLchar *)vertex_shader;
-	glShaderSource( vs, 1, &p, NULL );
-	glCompileShader( vs );
-
-	// check for compile errors
-	int params = -1;
-	glGetShaderiv( vs, GL_COMPILE_STATUS, &params );
-	if ( GL_TRUE != params ) {
-		fprintf( stderr, "ERROR: GL shader index %i did not compile\n", vs );
-		print_shader_info_log( vs );
-		return 1; // or exit or something
-	}
-
-	GLuint fs = glCreateShader( GL_FRAGMENT_SHADER );
-	p = (const GLchar *)fragment_shader;
-	glShaderSource( fs, 1, &p, NULL );
-	glCompileShader( fs );
-
-	// check for compile errors
-	glGetShaderiv( fs, GL_COMPILE_STATUS, &params );
-	if ( GL_TRUE != params ) {
-		fprintf( stderr, "ERROR: GL shader index %i did not compile\n", fs );
-		print_shader_info_log( fs );
-		return 1; // or exit or something
-	}
-
-	GLuint shader_programme = glCreateProgram();
-	glAttachShader( shader_programme, fs );
-	glAttachShader( shader_programme, vs );
-	glLinkProgram( shader_programme );
-
-	glGetProgramiv( shader_programme, GL_LINK_STATUS, &params );
-	if ( GL_TRUE != params ) {
-		fprintf( stderr, "ERROR: could not link shader programme GL index %i\n",
-						 shader_programme );
-		print_programme_info_log( shader_programme );
-		return false;
-	}
-
-	/* -------------- */
+	shared_ptr<Program> program1 = make_shared<Program>("assets/test_vs.glsl",  "assets/test_fs.glsl", vao);
 
 	shared_ptr<Program> program2 = make_shared<Program>("assets/test2_vs.glsl",  "assets/test_fs.glsl", vao2);
 
@@ -235,13 +190,8 @@ int main() {
 	mat4 R = rotate_y_deg( identity_mat4(), -cam_yaw );
 	mat4 view_mat = R * T;
 
-	/* get location numbers of matrices in shader programme */
-	GLint view_mat_location = glGetUniformLocation( shader_programme, "view" );
-	GLint proj_mat_location = glGetUniformLocation( shader_programme, "proj" );
-	/* use program (make current in state machine) and set default matrix values*/
-	glUseProgram( shader_programme );
-	glUniformMatrix4fv( view_mat_location, 1, GL_FALSE, view_mat.m );
-	glUniformMatrix4fv( proj_mat_location, 1, GL_FALSE, proj_mat );
+	program1->attachUniform("view", view_mat.m);
+	program1->attachUniform("proj", proj_mat);
 
 	program2->attachUniform("view", view_mat.m);
 	program2->attachUniform("proj", proj_mat);
@@ -269,15 +219,12 @@ int main() {
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		glViewport( 0, 0, g_gl_width, g_gl_height );
 
-		glUseProgram( shader_programme );
-		glBindVertexArray( vao );
+		//glUseProgram( shader_programme );
+		//glBindVertexArray( vao );
 		// draw points 0-3 from the currently bound VAO with current in-use shader
-		glDrawArrays( GL_TRIANGLES, 0, 12*3 );
+		//glDrawArrays( GL_TRIANGLES, 0, 12*3 );
 
-		//glUseProgram( shader_programme2 );
-		//glBindVertexArray( vao2 );
-		// draw points 0-3 from the currently bound VAO with current in-use shader
-		//glDrawArrays( GL_TRIANGLES, 0, 3 );
+		program1->draw();
 
 		program2->draw();
 
@@ -326,9 +273,8 @@ int main() {
 																								 -cam_pos[2] ) ); // cam translation
 			mat4 R = rotate_y_deg( identity_mat4(), -cam_yaw );					//
 			mat4 view_mat = R * T;
-			glUseProgram( shader_programme );
-			glUniformMatrix4fv( view_mat_location, 1, GL_FALSE, view_mat.m );
 
+			program1->attachUniform("view", view_mat.m);
 			program2->attachUniform("view", view_mat.m);
 		}
 
