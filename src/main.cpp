@@ -41,56 +41,26 @@ int main() {
 	/*------------------------------create
 	 * geometry-------------------------------*/
 
-	GLfloat colours[] = { 1.0f, 0.0f, 0.0f,
-		                    0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-		                    0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f };
+	 /*
 
-	shared_ptr<Component> component = make_shared<Prism>(1, 2, 3, make_shared<Point>(0, 0, 0));
-	// component->addVbo(points, 36);
+
+	shared_ptr<Component> component = make_shared<Prism>(1, 1, 1, make_shared<Point>(0, 0, 0));
 	component->addVbo(colours, 36);
 
 	shared_ptr<Component> component2 = make_shared<Prism>(3, 2, 1, make_shared<Point>(0, 0, 0));
 
+	*/
 	/*------------------------------create
 	 * shaders--------------------------------*/
 	shared_ptr<Program> program1 = make_shared<Program>(
-		"assets/test_vs.glsl",  "assets/test_fs.glsl", component);
+		"assets/test_vs.glsl",  "assets/test_fs.glsl");
+
+	program1->generateColouredPrism();
 
 	shared_ptr<Program> program2 = make_shared<Program>(
-		"assets/test2_vs.glsl",  "assets/test_fs.glsl", component2);
+		"assets/test2_vs.glsl",  "assets/test_fs.glsl");
+
+	program2->generatePrism();
 
 	/*--------------------------create camera
 	 * matrices----------------------------*/

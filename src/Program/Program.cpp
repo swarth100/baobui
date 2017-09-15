@@ -3,10 +3,9 @@
 /* Public */
 
 /* */
-Program::Program(const char* vertex_shader, const char* fragment_shader, shared_ptr<Component> component) {
+Program::Program(const char* vertex_shader, const char* fragment_shader) {
   this->vertex_shader = vertex_shader;
   this->fragment_shader = fragment_shader;
-  this->component = component;
   this->shader_programme = glCreateProgram();
 
   this->compileAllShaders();
@@ -25,9 +24,69 @@ void Program::attachUniform(const char* name, const GLfloat* value) {
 /* */
 void Program::draw() {
   glUseProgram(this->shader_programme);
-  glBindVertexArray(this->component->getVao());
 
-  glDrawArrays(GL_TRIANGLES, 0, this->component->getSize());
+  /* Iterate through all components within the componentList */
+  list<shared_ptr<Component>>::iterator it;
+  for (it = componentList.begin(); it != componentList.end(); ++it){
+    shared_ptr<Component> component = (*it);
+
+    /* For each component bind the relevant VAO and draw */
+    glBindVertexArray(component->getVao());
+    glDrawArrays(GL_TRIANGLES, 0, component->getSize());
+  }
+}
+
+/* */
+void Program::generatePrism() {
+  shared_ptr<Component> component = make_shared<Prism>(1, 2, 3, make_shared<Point>(0, 0, 0));
+
+  componentList.push_back(component);
+}
+
+/* */
+void Program::generateColouredPrism() {
+
+  GLfloat colours[] = { 1.0f, 0.0f, 0.0f,
+		                    0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+		                    0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f,
+												1.0f, 0.0f, 0.0f,
+												0.0f, 1.0f, 0.0f,
+												0.0f, 0.0f, 1.0f };
+
+  shared_ptr<Component> component = make_shared<Prism>(3, 2, 1, make_shared<Point>(0, 0, 0));
+  component->addVbo(colours, 36);
+
+  componentList.push_back(component);
 }
 
 /* Private */

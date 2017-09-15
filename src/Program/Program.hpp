@@ -3,14 +3,18 @@
 
 #include "../Util/Util.hpp"
 #include "../Component/Component.hpp"
+#include "../Component/Prism.hpp"
 
 class Program {
 public:
-  Program(const char* vertex_shader, const char* fragment_shader, shared_ptr<Component> component);
+  Program(const char* vertex_shader, const char* fragment_shader);
 
   void attachUniform(const char* name, const GLfloat* value);
 
   void draw();
+
+  void generatePrism();
+  void generateColouredPrism();
 
 protected:
 
@@ -18,7 +22,7 @@ private:
   const char* vertex_shader;
   const char* fragment_shader;
 
-  shared_ptr<Component> component;
+  list<shared_ptr<Component>> componentList;
 
   GLuint shader_programme;
   GLuint vs_Ref;
