@@ -5,16 +5,18 @@
 #include "../Util/Util.hpp"
 #include "../Geometry/Point.hpp"
 
-/* A Prism is a subClass of a Component */
+/* A Line is a subClass of a Component */
 class Line : public Component {
 public:
+  /* Constructor */
   Line(shared_ptr<Point> start, shared_ptr<Point> end);
 
 private:
-  /* Every Prism must be defined according to its 3D dimensions */
+  /* Private fields */
   shared_ptr<Point> start, end;
 
-  void getLine();
+  /* Helper generation method */
+  void generateLine();
 };
 
 #endif
