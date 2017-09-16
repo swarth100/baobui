@@ -39,15 +39,21 @@ void Program::draw() {
 
 /* */
 void Program::generatePrism() {
-  shared_ptr<Component> component = make_shared<Prism>(1, 2, 3, make_shared<Point>(0, 0, 0));
+  shared_ptr<Component> component = make_shared<Prism>(2, 2, 2, make_shared<Point>(0, 0, 0));
 
   componentList.push_back(component);
 }
 
 void Program::generateLine() {
-  shared_ptr<Component> component = make_shared<Line>(make_shared<Point>(0, 0, 0), make_shared<Point>(1, 1, 1));
+  for (int i = -100; i <= 100; i ++) {
+    shared_ptr<Component> component = make_shared<Line>(make_shared<Point>(-100, i, 0), make_shared<Point>(100, i, 0));
 
-  componentList.push_back(component);
+    componentList.push_back(component);
+
+    shared_ptr<Component> component2 = make_shared<Line>(make_shared<Point>(i, -100, 0), make_shared<Point>(i, 100, 0));
+
+    componentList.push_back(component2);
+  }
 }
 
 /* */
@@ -90,7 +96,7 @@ void Program::generateColouredPrism() {
 												0.0f, 1.0f, 0.0f,
 												0.0f, 0.0f, 1.0f };
 
-  shared_ptr<Component> component = make_shared<Prism>(3, 2, 1, make_shared<Point>(0, 0, 0));
+  shared_ptr<Component> component = make_shared<Prism>(2, 2, 2, make_shared<Point>(0, 0, 0));
   component->addVbo3(colours, 36);
 
   componentList.push_back(component);

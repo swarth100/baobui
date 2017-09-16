@@ -29,7 +29,7 @@ int main() {
 	shared_ptr<Program> texturedProgram = initProgram(
 		"assets/test_vs.glsl",  "assets/test_fs.glsl");
 
-	// texturedProgram->generateColouredPrism();
+	texturedProgram->generateColouredPrism();
 	//texturedProgram->generateLine();
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
