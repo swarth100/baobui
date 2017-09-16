@@ -29,14 +29,13 @@ int main() {
 	shared_ptr<Program> texturedProgram = initProgram(
 		"assets/test_vs.glsl",  "assets/test_fs.glsl");
 
-	texturedProgram->generateColouredPrism();
-	//texturedProgram->generateLine();
+	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(0, 0, 0));
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
 	shared_ptr<Program> untexturedProgram = initProgram(
 		"assets/test2_vs.glsl",  "assets/test_fs.glsl");
 
-	untexturedProgram->generateLine();
+	untexturedProgram->generateGrid(100, 1.0f);
 
 	/*--------------------------create camera
 	 * matrices----------------------------*/
