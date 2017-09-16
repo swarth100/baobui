@@ -8,7 +8,7 @@ SYS_LIB = -lGL
 .PHONY : all clean
 
 all:
-	$(CXX) -o $(PROG) $(CPPSOURCES) $(INC) $(LOC_LIB) $(SYS_LIB)
+	$(CXX) $(CXXFLAGS) -o $(PROG) $(CPPSOURCES) $(INC) $(LOC_LIB) $(SYS_LIB)
 
 clean:
 	rm -f *~ $(shell find -name '*.o') $(PROG)
