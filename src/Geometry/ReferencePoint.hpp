@@ -20,7 +20,7 @@ public:
 
   void attachPoint(shared_ptr<ArduinoPoint> arduinoPt);
 
-  void getValues(shared_ptr<Point>);
+  shared_ptr<DeltaObject> getValues(shared_ptr<Point>);
 
 private:
   shared_ptr<ArduinoPoint> center;

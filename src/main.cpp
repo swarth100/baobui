@@ -62,7 +62,7 @@ int main() {
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(90, 140, -20, 45, ArduinoPoint::BOT));
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(60, 70, 20, 100, ArduinoPoint::LEFT));
 
-	lowerLevel->getValues(make_shared<Point>(5, 5, 0));
+	lowerLevel->getValues(make_shared<Point>(-5, -5, 0));
 	//middleLevel->getValues(make_shared<Point>(0, 0, 0));
 	//upperLevel->getValues(make_shared<Point>(0, 0, 0));
 
