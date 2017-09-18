@@ -39,7 +39,6 @@ int main() {
 	lowerLevel->attachPoint(make_shared<ArduinoPoint>(90, 65, 90, -10, ArduinoPoint::RIGHT));
 	lowerLevel->attachPoint(make_shared<ArduinoPoint>(100, 140, 40, 45, ArduinoPoint::BOT));
 	lowerLevel->attachPoint(make_shared<ArduinoPoint>(95, 70, 90, 100, ArduinoPoint::LEFT));
-	lowerLevel->getValues(make_shared<Point>(0, 0, 0));
 
 	arduinoReferenceList.push_back(lowerLevel);
 
@@ -51,7 +50,6 @@ int main() {
 	middleLevel->attachPoint(make_shared<ArduinoPoint>(75, 70, 35, -10, ArduinoPoint::RIGHT));
 	middleLevel->attachPoint(make_shared<ArduinoPoint>(90, 140, 20, 45, ArduinoPoint::BOT));
 	middleLevel->attachPoint(make_shared<ArduinoPoint>(75, 75, 35, 100, ArduinoPoint::LEFT));
-	middleLevel->getValues(make_shared<Point>(0, 0, 0));
 
 	arduinoReferenceList.push_back(middleLevel);
 
@@ -63,7 +61,10 @@ int main() {
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(60, 70, 20, -10, ArduinoPoint::RIGHT));
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(90, 140, -20, 45, ArduinoPoint::BOT));
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(60, 70, 20, 100, ArduinoPoint::LEFT));
-	upperLevel->getValues(make_shared<Point>(0, 0, 0));
+
+	lowerLevel->getValues(make_shared<Point>(5, 5, 0));
+	//middleLevel->getValues(make_shared<Point>(0, 0, 0));
+	//upperLevel->getValues(make_shared<Point>(0, 0, 0));
 
 	arduinoReferenceList.push_back(upperLevel);
 

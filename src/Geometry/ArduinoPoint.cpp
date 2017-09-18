@@ -19,5 +19,17 @@ void ArduinoPoint::computeDeltas(shared_ptr<ArduinoPoint> centerPtr) {
   int delta3 = this->servo3 - centerPtr->servo3;
   int delta4 = this->servo4 - centerPtr->servo4;
 
-  this->delta = make_shared<DeltaObject>(delta1, delta2, delta3, delta4);
+  bool isHorizontal;
+
+  switch (this->cardinal) {
+    case RIGHT:
+    case LEFT:
+      isHorizontal = true;
+      break;
+    default:
+      isHorizontal = false;
+      break;
+  }
+
+  this->delta = make_shared<DeltaObject>(delta1, delta2, delta3, delta4, isHorizontal);
 }
