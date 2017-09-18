@@ -21,6 +21,8 @@ int g_gl_width = 640;
 int g_gl_height = 480;
 GLFWwindow *g_window = NULL;
 
+list<shared_ptr<ReferencePoint>> arduinoReferenceList;
+
 int main() {
 	restart_gl_log();
 
@@ -39,6 +41,8 @@ int main() {
 	lowerLevel->attachPoint(make_shared<ArduinoPoint>(95, 70, 90, 100, ArduinoPoint::LEFT));
 	lowerLevel->getValues(make_shared<Point>(0, 0, 0));
 
+	arduinoReferenceList.push_back(lowerLevel);
+
 	/* Middle level */
 	shared_ptr<ArduinoPoint> middleCenter = make_shared<ArduinoPoint>(70, 90, 20, 45, ArduinoPoint::CENTER);
 	shared_ptr<ReferencePoint> middleLevel = make_shared<ReferencePoint>(middleCenter, ReferencePoint::LOWER);
@@ -49,6 +53,8 @@ int main() {
 	middleLevel->attachPoint(make_shared<ArduinoPoint>(75, 75, 35, 100, ArduinoPoint::LEFT));
 	middleLevel->getValues(make_shared<Point>(0, 0, 0));
 
+	arduinoReferenceList.push_back(middleLevel);
+
 	/* Upper level */
 	shared_ptr<ArduinoPoint> upperCenter = make_shared<ArduinoPoint>(50, 100, 0, 45, ArduinoPoint::CENTER);
 	shared_ptr<ReferencePoint> upperLevel = make_shared<ReferencePoint>(upperCenter, ReferencePoint::LOWER);
@@ -58,6 +64,10 @@ int main() {
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(90, 140, -20, 45, ArduinoPoint::BOT));
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(60, 70, 20, 100, ArduinoPoint::LEFT));
 	upperLevel->getValues(make_shared<Point>(0, 0, 0));
+
+	arduinoReferenceList.push_back(upperLevel);
+
+
 
 	/* Initialise Program for textured Objects */
 	shared_ptr<Program> texturedProgram = initProgram(

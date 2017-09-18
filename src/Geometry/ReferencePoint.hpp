@@ -4,6 +4,7 @@
 #include "../Util/Util.hpp"
 #include "Point.hpp"
 #include "ArduinoPoint.hpp"
+#include "DeltaObject.hpp"
 
 class ReferencePoint {
 public:

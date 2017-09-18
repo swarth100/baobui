@@ -2,6 +2,7 @@
 #define ARDUINO_POINT_H
 
 #include "../Util/Util.hpp"
+#include "DeltaObject.hpp"
 
 class ArduinoPoint {
 public:
@@ -14,7 +15,7 @@ public:
   };
 
   int servo1, servo2, servo3, servo4;
-  int delta1, delta2, delta3, delta4;
+  shared_ptr<DeltaObject> delta;
 
   ArduinoPoint::Cardinals cardinal;
 

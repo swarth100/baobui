@@ -18,6 +18,8 @@ void ReferencePoint::getValues(shared_ptr<Point>) {
   for (it = this->arduinoPoints.begin(); it != this->arduinoPoints.end(); ++it){
 		shared_ptr<ArduinoPoint> arduinoPt = (*it);
 
-		printf("1: %i, 2: %i, 3: %i, 4: %i\n", arduinoPt->delta1, arduinoPt->delta2, arduinoPt->delta3, arduinoPt->delta4);
+    shared_ptr<DeltaObject> delta = arduinoPt->delta;
+
+		printf("1: %i, 2: %i, 3: %i, 4: %i\n", delta->delta1, delta->delta2, delta->delta3, delta->delta4);
 	}
 }

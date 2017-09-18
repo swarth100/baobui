@@ -14,8 +14,10 @@ ArduinoPoint::ArduinoPoint(int servo1, int servo2, int servo3, int servo4, Ardui
 
 /* */
 void ArduinoPoint::computeDeltas(shared_ptr<ArduinoPoint> centerPtr) {
-  this->delta1 = this->servo1 - centerPtr->servo1;
-  this->delta2 = this->servo2 - centerPtr->servo2;
-  this->delta3 = this->servo3 - centerPtr->servo3;
-  this->delta4 = this->servo4 - centerPtr->servo4;
+  int delta1 = this->servo1 - centerPtr->servo1;
+  int delta2 = this->servo2 - centerPtr->servo2;
+  int delta3 = this->servo3 - centerPtr->servo3;
+  int delta4 = this->servo4 - centerPtr->servo4;
+
+  this->delta = make_shared<DeltaObject>(delta1, delta2, delta3, delta4);
 }
