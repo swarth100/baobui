@@ -7,7 +7,15 @@
 
 class ReferencePoint {
 public:
-  ReferencePoint(shared_ptr<ArduinoPoint> center);
+  enum Position {
+    HIGHER,
+    MIDDLE,
+    LOWER
+  };
+
+  ReferencePoint::Position position;
+
+  ReferencePoint(shared_ptr<ArduinoPoint> center, ReferencePoint::Position pos);
 
   void attachPoint(shared_ptr<ArduinoPoint> arduinoPt);
 

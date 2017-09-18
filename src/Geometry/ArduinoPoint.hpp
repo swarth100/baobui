@@ -7,10 +7,10 @@ class ArduinoPoint {
 public:
   enum Cardinals {
     CENTER,
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST
+    TOP,
+    RIGHT,
+    BOT,
+    LEFT
   };
 
   int servo1, servo2, servo3, servo4;
