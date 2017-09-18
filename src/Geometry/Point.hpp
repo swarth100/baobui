@@ -1,6 +1,8 @@
 #ifndef POINT_H
 #define POINT_H
 
+#include "../Util/Util.hpp"
+
 class Point {
 public:
   /* Public fields */
@@ -8,6 +10,8 @@ public:
 
   /* Constructor */
   Point (float x, float y, float z);
+
+  void print();
 };
 
 #endif

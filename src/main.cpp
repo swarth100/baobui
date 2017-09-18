@@ -31,9 +31,6 @@ int main() {
 	/* Setup arduino */
 	setupArduino();
 
-	shared_ptr<ReferencePoint> refPos = determineArduinoDeltas(make_shared<Point>(5, 5, 5.0f));
-	refPos->getInnerArduinoData()->print();
-
 	/* Initialise Program for textured Objects */
 	shared_ptr<Program> texturedProgram = initProgram(
 		"assets/test_vs.glsl",  "assets/test_fs.glsl");
@@ -69,7 +66,7 @@ int main() {
 	float cam_speed = 1.0f;			 // 1 unit per second
 	float cam_yaw_speed = 10.0f; // 10 degrees per second
 	float cam_pos[] = { 0.0f, 0.0f,
-											4.0f }; // don't start at zero, or we will be too close
+											5.0f }; // don't start at zero, or we will be too close
 	float cam_yaw = 0.0f;				// y-rotation in degrees
 	mat4 T =
 		translate( identity_mat4(), vec3( -cam_pos[0], -cam_pos[1], -cam_pos[2] ) );
@@ -153,6 +150,11 @@ int main() {
 
 			/* Update the uniforms attached to the various programs */
 			attachUniforms("view", view_mat.m);
+
+			shared_ptr<Point> cameraPosition = make_shared<Point>(cam_pos[0], cam_pos[1], cam_pos[2]);
+			cameraPosition->print();
+			shared_ptr<ReferencePoint> refPos = determineArduinoDeltas(cameraPosition);
+			refPos->getInnerArduinoData()->print();
 		}
 
 		if ( GLFW_PRESS == glfwGetKey( g_window, GLFW_KEY_ESCAPE ) ) {
