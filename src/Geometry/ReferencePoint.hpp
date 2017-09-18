@@ -22,6 +22,8 @@ public:
 
   shared_ptr<DeltaObject> getValues(shared_ptr<Point>);
 
+  shared_ptr<ArduinoPoint> getInnerArduinoData();
+
 private:
   shared_ptr<ArduinoPoint> center;
 

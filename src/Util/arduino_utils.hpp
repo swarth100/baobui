@@ -9,4 +9,8 @@
 
 void setupArduino();
 
+shared_ptr<ReferencePoint> determineArduinoDeltas(shared_ptr<Point> point);
+
+shared_ptr<DeltaObject> getDeltaZDiff(shared_ptr<DeltaObject>, shared_ptr<DeltaObject>, float, float);
+
 #endif

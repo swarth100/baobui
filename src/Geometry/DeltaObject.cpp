@@ -49,3 +49,7 @@ int DeltaObject::getWeightedDelta (int deltaVal) {
   }
   return deltaVal;
 }
+
+void DeltaObject::print() {
+  printf("Deltas, 1:%i, 2:%i, 3:%i, 4:%i\n", delta1, delta2, delta3, delta4);
+}

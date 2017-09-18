@@ -13,6 +13,10 @@ void ReferencePoint::attachPoint(shared_ptr<ArduinoPoint> arduinoPt) {
   arduinoPt->computeDeltas(this->center);
 }
 
+shared_ptr<ArduinoPoint> ReferencePoint::getInnerArduinoData() {
+  return this->center;
+}
+
 shared_ptr<DeltaObject> ReferencePoint::getValues(shared_ptr<Point> point) {
   int tmpDelta1 = 0;
   int tmpDelta2 = 0;
@@ -40,14 +44,14 @@ shared_ptr<DeltaObject> ReferencePoint::getValues(shared_ptr<Point> point) {
 
       delta->setRefPoint(point);
 
-      printf("%i\n", arduinoPt->cardinal);
+      // printf("%i\n", arduinoPt->cardinal);
 
       tmpDelta1 += delta->getDelta1();
       tmpDelta2 += delta->getDelta2();
       tmpDelta3 += delta->getDelta3();
       tmpDelta4 += delta->getDelta4();
 
-  		printf("1: %i, 2: %i, 3: %i, 4: %i\n", delta->getDelta1(), delta->getDelta2(), delta->getDelta3(), delta->getDelta4());
+  		// printf("1: %i, 2: %i, 3: %i, 4: %i\n", delta->getDelta1(), delta->getDelta2(), delta->getDelta3(), delta->getDelta4());
 
       delta->removePoint();
     }

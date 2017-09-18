@@ -22,6 +22,7 @@ public:
   ArduinoPoint(int, int, int, int, ArduinoPoint::Cardinals);
 
   void computeDeltas(shared_ptr<ArduinoPoint>);
+  void print();
 };
 
 #endif

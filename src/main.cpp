@@ -31,6 +31,9 @@ int main() {
 	/* Setup arduino */
 	setupArduino();
 
+	shared_ptr<ReferencePoint> refPos = determineArduinoDeltas(make_shared<Point>(5, 5, 5.0f));
+	refPos->getInnerArduinoData()->print();
+
 	/* Initialise Program for textured Objects */
 	shared_ptr<Program> texturedProgram = initProgram(
 		"assets/test_vs.glsl",  "assets/test_fs.glsl");

@@ -10,6 +10,7 @@ public:
 
   void setRefPoint(shared_ptr<Point>);
   void removePoint();
+  void print();
 
   int getDelta1();
   int getDelta2();
