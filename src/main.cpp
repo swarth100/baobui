@@ -22,6 +22,65 @@ int g_gl_width = 640;
 int g_gl_height = 480;
 GLFWwindow *g_window = NULL;
 
+int
+set_interface_attribs (int fd, int speed, int parity)
+{
+	struct termios tty;
+	memset (&tty, 0, sizeof tty);
+	if (tcgetattr (fd, &tty) != 0)
+	{
+		fprintf( stderr, "error %d from tcgetattr", errno);
+	  return -1;
+	}
+
+	cfsetospeed (&tty, speed);
+	cfsetispeed (&tty, speed);
+
+	tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;     // 8-bit chars
+	// disable IGNBRK for mismatched speed tests; otherwise receive break
+	// as \000 chars
+	tty.c_iflag &= ~IGNBRK;         // disable break processing
+	tty.c_lflag = 0;                // no signaling chars, no echo,
+	                                // no canonical processing
+	tty.c_oflag = 0;                // no remapping, no delays
+	tty.c_cc[VMIN]  = 0;            // read doesn't block
+	tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
+
+	tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
+
+	tty.c_cflag |= (CLOCAL | CREAD);// ignore modem controls,
+	                                // enable reading
+	tty.c_cflag &= ~(PARENB | PARODD);      // shut off parity
+	tty.c_cflag |= parity;
+	tty.c_cflag &= ~CSTOPB;
+	tty.c_cflag &= ~CRTSCTS;
+
+	if (tcsetattr (fd, TCSANOW, &tty) != 0)
+	{
+	  fprintf( stderr, "error %d from tcsetattr", errno);
+	  return -1;
+	}
+	return 0;
+}
+
+void
+set_blocking (int fd, int should_block)
+{
+	struct termios tty;
+	memset (&tty, 0, sizeof tty);
+	if (tcgetattr (fd, &tty) != 0)
+	{
+    fprintf( stderr, "error %d from tggetattr", errno);
+    return;
+	}
+
+	tty.c_cc[VMIN]  = should_block ? 1 : 0;
+	tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
+
+	if (tcsetattr (fd, TCSANOW, &tty) != 0)
+    fprintf(stderr, "error %d setting term attributes", errno);
+}
+
 int main() {
 	restart_gl_log();
 
@@ -30,6 +89,57 @@ int main() {
 
 	/* Setup arduino */
 	setupArduino();
+
+	/* */
+	const char *portname = "/dev/ttyACM0";
+
+	int fd = open (portname, O_RDWR | O_NOCTTY | O_SYNC);
+	if (fd < 0)
+	{
+    fprintf(stderr, "error %d opening %s: %s", errno, portname, strerror (errno));
+    exit(-1);
+	}
+
+	set_interface_attribs (fd, B115200, 0);  // set speed to 115,200 bps, 8n1 (no parity)
+	set_blocking (fd, 0);                // set no blocking
+
+	uint8_t bytes_to_send[6];
+	bytes_to_send[0] = 200;
+  bytes_to_send[1] = 20;
+  bytes_to_send[2] = 40;
+  bytes_to_send[3] = 60;
+  bytes_to_send[4] = 80;
+	bytes_to_send[5] = 120;
+
+	write (fd, bytes_to_send, 6);
+	usleep ((6 + 25) * 100);
+                                     // receive 25:  approx 100 uS per char transmit
+	for (; ;) {
+		int bytes_avail;
+		ioctl(fd, FIONREAD, &bytes_avail);
+		if (bytes_avail >= 6) {
+			uint8_t auth [1];
+			read (fd, auth, sizeof auth);
+
+			if (auth[0] == 201) {
+				// printf("ioctl: %i\n", bytes_avail);
+				uint8_t buf [5];
+				read (fd, buf, sizeof buf);  // read up to 100 characters if ready to read
+				printf("%i %i %i %i %i\n", buf[0], buf[1], buf[2], buf[3], buf[4]);
+
+				uint8_t bytes_to_send[6];
+				bytes_to_send[0] = 200;
+			  bytes_to_send[1] = 30;
+			  bytes_to_send[2] = 50;
+			  bytes_to_send[3] = 70;
+			  bytes_to_send[4] = 90;
+				bytes_to_send[5] = 130;
+
+				write (fd, bytes_to_send, 6);
+				usleep ((6 + 25) * 100);
+			}
+		}
+	}
 
 	/* Initialise Program for textured Objects */
 	shared_ptr<Program> texturedProgram = initProgram(
