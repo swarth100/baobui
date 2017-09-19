@@ -2,7 +2,8 @@
 
 /* --------------------------------- Public --------------------------------- */
 
-/* */
+/* Arduino points are initialised with a given servo configuration and a
+   Cardinal expressing the point's "position" */
 ArduinoPoint::ArduinoPoint(int servo1, int servo2, int servo3, int servo4, ArduinoPoint::Cardinals cardinal) {
   this->servo1 = servo1;
   this->servo2 = servo2;
@@ -12,7 +13,7 @@ ArduinoPoint::ArduinoPoint(int servo1, int servo2, int servo3, int servo4, Ardui
   this->cardinal = cardinal;
 }
 
-/* */
+/* Computes and updates the given delta fields given a reference central point */
 void ArduinoPoint::computeDeltas(shared_ptr<ArduinoPoint> centerPtr) {
   int delta1 = this->servo1 - centerPtr->servo1;
   int delta2 = this->servo2 - centerPtr->servo2;
@@ -21,6 +22,7 @@ void ArduinoPoint::computeDeltas(shared_ptr<ArduinoPoint> centerPtr) {
 
   bool isHorizontal;
 
+  /* Uses the cardinal fields to determine the orientation */
   switch (this->cardinal) {
     case RIGHT:
     case LEFT:
@@ -34,7 +36,7 @@ void ArduinoPoint::computeDeltas(shared_ptr<ArduinoPoint> centerPtr) {
   this->delta = make_shared<DeltaObject>(delta1, delta2, delta3, delta4, isHorizontal);
 }
 
-/* */
+/* Debug print method */
 void ArduinoPoint::print() {
   printf("Deltas, 1:%i, 2:%i, 3:%i, 4:%i\n", servo1 + delta->getDelta1(), servo2 + delta->getDelta2(), servo3 + delta->getDelta3(), servo4 + delta->getDelta4());
 }
