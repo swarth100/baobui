@@ -10,5 +10,5 @@ Point::Point(float x, float y, float z) {
 }
 
 void Point::print() {
-  printf("X: %f, Y: %f, Z: %f", x, y ,z);
+  printf("X: %f, Y: %f, Z: %f\n", x, y ,z);
 }

@@ -4,6 +4,7 @@
 #include "Util/Util.hpp"
 #include "Util/program_utils.hpp"
 #include "Util/arduino_utils.hpp"
+#include "Util/camera_utils.hpp"
 #include "Math/maths_funcs.h"
 #include "Component/Component.hpp"
 #include "Component/Line.hpp"
@@ -55,26 +56,20 @@ int main() {
 	float fov = 67.0f * ONE_DEG_IN_RAD; // convert 67 degrees to radians
 	float aspect = (float)g_gl_width / (float)g_gl_height; // aspect ratio
 	// matrix components
-	float range = tan( fov * 0.5f ) * near;
-	float Sx = ( 2.0f * near ) / ( range * aspect + range * aspect );
+	float range = tan(fov * 0.5f) * near;
+	float Sx = (2.0f * near) / (range * aspect + range * aspect);
 	float Sy = near / range;
-	float Sz = -( far + near ) / ( far - near );
-	float Pz = -( 2.0f * far * near ) / ( far - near );
+	float Sz = -(far + near) / (far - near);
+	float Pz = -(2.0f * far * near) / (far - near);
 	GLfloat proj_mat[] = {  Sx, 0.0f, 0.0f, 0.0f,
 		                    0.0f,   Sy,	0.0f, 0.0f,
 												0.0f, 0.0f,   Sz,-1.0f,
 												0.0f, 0.0f,   Pz, 0.0f };
 
 	/* create VIEW MATRIX */
-	float cam_speed = 1.5f;			 // 1 unit per second
-	float cam_yaw_speed = 10.0f; // 10 degrees per second
-	float cam_pos[] = { 0.0f, 0.0f,
-											5.0f }; // don't start at zero, or we will be too close
-	float cam_yaw = 0.0f;				// y-rotation in degrees
-	mat4 T =
-		translate( identity_mat4(), vec3( -cam_pos[0], -cam_pos[1], -cam_pos[2] ) );
-	mat4 R = rotate_y_deg( identity_mat4(), -cam_yaw );
-	mat4 view_mat = R * T;
+	init_camera(0.0f, 0.0f, 10.0f);
+
+	mat4 view_mat = getTranslationMatrix();
 
 	/* Attach the newly created uniforms to all programs */
 	attachUniforms("view", view_mat.m);
@@ -92,16 +87,16 @@ int main() {
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
 
-	while ( !glfwWindowShouldClose( g_window ) ) {
+	while (!glfwWindowShouldClose(g_window)) {
 		static double previous_seconds = glfwGetTime();
 		double current_seconds = glfwGetTime();
 		double elapsed_seconds = current_seconds - previous_seconds;
 		previous_seconds = current_seconds;
 
-		_update_fps_counter( g_window );
+		_update_fps_counter(g_window);
 		// wipe the drawing surface clear
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-		glViewport( 0, 0, g_gl_width, g_gl_height );
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glViewport(0, 0, g_gl_width, g_gl_height);
 
 		/* Iterate through all programs calling draw() on their components */
 		drawAllPrograms();
@@ -112,50 +107,17 @@ int main() {
 		/*-----------------------------move camera
 		 * here-------------------------------*/
 		// control keys
-		bool cam_moved = false;
-		if ( glfwGetKey( g_window, GLFW_KEY_LEFT ) ) {
-			cam_pos[0] -= cam_speed * elapsed_seconds;
-			cam_moved = true;
-		}
-		if ( glfwGetKey( g_window, GLFW_KEY_RIGHT ) ) {
-			cam_pos[0] += cam_speed * elapsed_seconds;
-			cam_moved = true;
-		}
-		if ( glfwGetKey( g_window, GLFW_KEY_UP ) ) {
-			cam_pos[1] += cam_speed * elapsed_seconds;
-			cam_moved = true;
-		}
-		if ( glfwGetKey( g_window, GLFW_KEY_DOWN ) ) {
-			cam_pos[1] -= cam_speed * elapsed_seconds;
-			cam_moved = true;
-		}
-		if ( glfwGetKey( g_window, GLFW_KEY_W ) ) {
-			cam_pos[2] -= cam_speed * elapsed_seconds;
-			cam_moved = true;
-		}
-		if ( glfwGetKey( g_window, GLFW_KEY_S ) ) {
-			cam_pos[2] += cam_speed * elapsed_seconds;
-			cam_moved = true;
-		}
-		if ( glfwGetKey( g_window, GLFW_KEY_A ) ) {
-			cam_yaw += cam_yaw_speed * elapsed_seconds;
-			cam_moved = true;
-		}
-		if ( glfwGetKey( g_window, GLFW_KEY_D ) ) {
-			cam_yaw -= cam_yaw_speed * elapsed_seconds;
-			cam_moved = true;
-		}
+		bool cam_moved = update_camera(g_window, elapsed_seconds);
 
 		/* Update view matrix */
 		if (cam_moved) {
-			mat4 T = translate(identity_mat4(), vec3(-cam_pos[0], -cam_pos[1], -cam_pos[2]));
-			mat4 R = rotate_y_deg(identity_mat4(), -cam_yaw);					//
-			mat4 view_mat = R * T;
+			/* */
+			mat4 view_mat = getTranslationMatrix();
 
 			/* Update the uniforms attached to the various programs */
 			attachUniforms("view", view_mat.m);
 
-			shared_ptr<Point> cameraPosition = make_shared<Point>(cam_pos[0], cam_pos[1], cam_pos[2]);
+			shared_ptr<Point> cameraPosition = getCamera();
 			cameraPosition->print();
 			shared_ptr<ReferencePoint> refPos = determineArduinoDeltas(cameraPosition);
 			refPos->getInnerArduinoData()->print();
@@ -164,11 +126,11 @@ int main() {
 			sendByteData(refPos->getInnerArduinoData()->createBuffer());
 		}
 
-		if ( GLFW_PRESS == glfwGetKey( g_window, GLFW_KEY_ESCAPE ) ) {
-			glfwSetWindowShouldClose( g_window, 1 );
+		if ( GLFW_PRESS == glfwGetKey(g_window, GLFW_KEY_ESCAPE)) {
+			glfwSetWindowShouldClose(g_window, 1);
 		}
 		// put the stuff we've been drawing onto the display
-		glfwSwapBuffers( g_window );
+		glfwSwapBuffers(g_window);
 
 		/* Read the data sent over by arduino */
 		readByteData();
