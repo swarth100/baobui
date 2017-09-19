@@ -5,8 +5,8 @@ float cam_yaw_speed;
 float cam_pos[3];
 float cam_yaw;
 
-void init_camera(float x, float y, float z) {
-  cam_speed = 1.5f;			 // 1 unit per second
+void init_camera(float x, float y, float z, float speed) {
+  cam_speed = speed;			 // 1 unit per second
 	cam_yaw_speed = 10.0f; // 10 degrees per second
 
   /* */
@@ -22,27 +22,27 @@ void init_camera(float x, float y, float z) {
 bool update_camera(GLFWwindow* g_window, double elapsed_seconds) {
 	bool cam_moved = false;
 	if (glfwGetKey(g_window, GLFW_KEY_LEFT)) {
-		cam_pos[0] -= cam_speed * elapsed_seconds;
+		updateCameraPos(0, false, elapsed_seconds);
 		cam_moved = true;
 	}
 	if (glfwGetKey(g_window, GLFW_KEY_RIGHT)) {
-		cam_pos[0] += cam_speed * elapsed_seconds;
+		updateCameraPos(0, true, elapsed_seconds);
 		cam_moved = true;
 	}
 	if (glfwGetKey(g_window, GLFW_KEY_UP)) {
-		cam_pos[1] += cam_speed * elapsed_seconds;
+		updateCameraPos(1, true, elapsed_seconds);
 		cam_moved = true;
 	}
 	if (glfwGetKey(g_window, GLFW_KEY_DOWN)) {
-		cam_pos[1] -= cam_speed * elapsed_seconds;
+		updateCameraPos(1, false, elapsed_seconds);
 		cam_moved = true;
 	}
 	if (glfwGetKey(g_window, GLFW_KEY_W)) {
-		cam_pos[2] -= cam_speed * elapsed_seconds;
+		updateCameraPos(2, false, elapsed_seconds);
 		cam_moved = true;
 	}
 	if (glfwGetKey(g_window, GLFW_KEY_S)) {
-		cam_pos[2] += cam_speed * elapsed_seconds;
+		updateCameraPos(2, true, elapsed_seconds);
 		cam_moved = true;
 	}
 	if (glfwGetKey(g_window, GLFW_KEY_A)) {
@@ -55,6 +55,25 @@ bool update_camera(GLFWwindow* g_window, double elapsed_seconds) {
 	}
 
 	return cam_moved;
+}
+
+bool updateCameraPos(int index, bool increase, float elapsed_seconds) {
+  float old_value = cam_pos[index];
+
+  if (increase) {
+    cam_pos[index] += cam_speed * elapsed_seconds;
+  } else {
+    cam_pos[index] -= cam_speed * elapsed_seconds;
+  }
+
+  if (float_abs(cam_pos[0]) + float_abs(cam_pos[1]) > 10) {
+    cam_pos[index] = old_value;
+  }
+  if (cam_pos[2] < 5 || cam_pos[2] > 15) {
+    cam_pos[index] = old_value;
+  }
+
+  return true;
 }
 
 /* */

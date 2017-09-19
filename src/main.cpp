@@ -37,19 +37,17 @@ int main() {
 
 	/* Initialise Program for textured Objects */
 	shared_ptr<Program> texturedProgram = initProgram(
-		"assets/test_vs.glsl",  "assets/test_fs.glsl");
+		"assets/test_vs.glsl", "assets/test_fs.glsl");
 
 	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(0, 0, 0));
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
 	shared_ptr<Program> untexturedProgram = initProgram(
-		"assets/test2_vs.glsl",  "assets/test_fs.glsl");
+		"assets/test2_vs.glsl", "assets/test_fs.glsl");
 
 	untexturedProgram->generateGrid(100, 1.0f);
 
-	/*--------------------------create camera
-	 * matrices----------------------------*/
-	/* create PROJECTION MATRIX */
+	/* Initialise the projection matrix */
 	// input variables
 	float near = 0.1f;									// clipping plane
 	float far = 100.0f;									// clipping plane
@@ -66,9 +64,11 @@ int main() {
 												0.0f, 0.0f,   Sz,-1.0f,
 												0.0f, 0.0f,   Pz, 0.0f };
 
-	/* create VIEW MATRIX */
-	init_camera(0.0f, 0.0f, 10.0f);
+	/* Initialise the camera instance.
+	   Holds an instance of the view matrix. */
+	init_camera(0.0f, 0.0f, 10.0f, 2.0f);
 
+	/* Retrieve the translation matrix from the initialised camera */
 	mat4 view_mat = getTranslationMatrix();
 
 	/* Attach the newly created uniforms to all programs */
