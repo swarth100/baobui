@@ -30,6 +30,8 @@ public:
   /* Public methods */
   void computeDeltas(shared_ptr<ArduinoPoint>);
   void print();
+
+  uint8_t* createBuffer();
 };
 
 #endif
