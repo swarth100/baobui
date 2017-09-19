@@ -3,11 +3,14 @@
 
 #include "Util/Util.hpp"
 #include "Util/program_utils.hpp"
+#include "Util/arduino_utils.hpp"
 #include "Math/maths_funcs.h"
 #include "Component/Component.hpp"
 #include "Component/Line.hpp"
 #include "Component/Prism.hpp"
 #include "Geometry/Point.hpp"
+#include "Geometry/ArduinoPoint.hpp"
+#include "Geometry/ReferencePoint.hpp"
 #include "Program/Program.hpp"
 
 #define GL_LOG_FILE "gl.log"
@@ -24,6 +27,12 @@ int main() {
 
 	/* Start GL context */
 	start_gl();
+
+	/* Setup arduino */
+	setupArduino();
+
+	/* Setup Serial port communication */
+	setupSerial("/dev/ttyACM0");
 
 	/* Initialise Program for textured Objects */
 	shared_ptr<Program> texturedProgram = initProgram(
@@ -57,10 +66,10 @@ int main() {
 												0.0f, 0.0f,   Pz, 0.0f };
 
 	/* create VIEW MATRIX */
-	float cam_speed = 1.0f;			 // 1 unit per second
+	float cam_speed = 1.5f;			 // 1 unit per second
 	float cam_yaw_speed = 10.0f; // 10 degrees per second
 	float cam_pos[] = { 0.0f, 0.0f,
-											4.0f }; // don't start at zero, or we will be too close
+											5.0f }; // don't start at zero, or we will be too close
 	float cam_yaw = 0.0f;				// y-rotation in degrees
 	mat4 T =
 		translate( identity_mat4(), vec3( -cam_pos[0], -cam_pos[1], -cam_pos[2] ) );
@@ -94,6 +103,7 @@ int main() {
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		glViewport( 0, 0, g_gl_width, g_gl_height );
 
+		/* Iterate through all programs calling draw() on their components */
 		drawAllPrograms();
 
 		// update other events like input handling
@@ -135,15 +145,23 @@ int main() {
 			cam_yaw -= cam_yaw_speed * elapsed_seconds;
 			cam_moved = true;
 		}
-		/* update view matrix */
-		if ( cam_moved ) {
-			mat4 T = translate( identity_mat4(), vec3( -cam_pos[0], -cam_pos[1],
-																								 -cam_pos[2] ) ); // cam translation
-			mat4 R = rotate_y_deg( identity_mat4(), -cam_yaw );					//
+
+		/* Update view matrix */
+		if (cam_moved) {
+			mat4 T = translate(identity_mat4(), vec3(-cam_pos[0], -cam_pos[1], -cam_pos[2]));
+			mat4 R = rotate_y_deg(identity_mat4(), -cam_yaw);					//
 			mat4 view_mat = R * T;
 
 			/* Update the uniforms attached to the various programs */
 			attachUniforms("view", view_mat.m);
+
+			shared_ptr<Point> cameraPosition = make_shared<Point>(cam_pos[0], cam_pos[1], cam_pos[2]);
+			cameraPosition->print();
+			shared_ptr<ReferencePoint> refPos = determineArduinoDeltas(cameraPosition);
+			refPos->getInnerArduinoData()->print();
+
+			/* Send the current buffer data information to arduino */
+			sendByteData(refPos->getInnerArduinoData()->createBuffer());
 		}
 
 		if ( GLFW_PRESS == glfwGetKey( g_window, GLFW_KEY_ESCAPE ) ) {
@@ -151,6 +169,9 @@ int main() {
 		}
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers( g_window );
+
+		/* Read the data sent over by arduino */
+		readByteData();
 	}
 
 	// close GL context and any other GLFW resources

@@ -8,3 +8,7 @@ Point::Point(float x, float y, float z) {
   this->y = y;
   this->z = z;
 }
+
+void Point::print() {
+  printf("X: %f, Y: %f, Z: %f", x, y ,z);
+}

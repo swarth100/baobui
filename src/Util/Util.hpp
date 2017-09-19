@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
@@ -18,6 +19,11 @@
 #include <string>
 #include <string.h>
 #include <numeric>
+#include <errno.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
 
 #include "gl_utils.h"
 
