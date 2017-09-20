@@ -11,6 +11,7 @@ void init_camera(float, float, float, float);
 shared_ptr<Point> getCamera();
 
 mat4 getTranslationMatrix();
+mat4 getProjectionMatrix();
 
 int getExtensionAngle();
 
