@@ -53,6 +53,13 @@ int main() {
 	   Holds an instance of the view matrix. */
 	init_camera(0.0f, 0.0f, 10.0f, 2.0f);
 
+	GLfloat matrix[] = {
+		1.0f, 0.0f, 0.0f, 0.0f, // first column
+		0.0f, 1.0f, 0.0f, 0.0f, // second column
+		0.0f, 0.0f, 1.0f, 0.0f, // third column
+		0.0f, 0.0f, 8.0f, 1.0f	// fourth column
+	};
+
 	/* Retrieve the translation matrix from the initialised camera */
 	mat4 view_mat = getTranslationMatrix();
 
@@ -62,6 +69,7 @@ int main() {
 	/* Attach the newly created uniforms to all programs */
 	attachUniforms("view", view_mat.m);
 	attachUniforms("proj", proj_mat.m);
+	attachUniforms("pos", matrix);
 
 	//glEnable( GL_CULL_FACE ); // cull face
 	//glCullFace( GL_BACK );		// cull back face
