@@ -150,4 +150,6 @@ versor slerp( const versor &q, const versor &r );
 versor normalise( versor &q );
 void print( const versor &q );
 versor slerp( versor &q, versor &r, float t );
+
+float float_abs(float);
 #endif

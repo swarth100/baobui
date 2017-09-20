@@ -655,3 +655,9 @@ versor slerp( versor &q, versor &r, float t ) {
 	}
 	return result;
 }
+
+float float_abs(float val) {
+	if (val <= 0)
+		return val *= -1;
+	return val;
+}

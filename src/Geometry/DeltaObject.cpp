@@ -37,6 +37,11 @@ void DeltaObject::removePoint() {
 }
 
 /* Retrieves the delta1 field */
+int DeltaObject::getDelta0() {
+  return this->delta0;
+}
+
+/* Retrieves the delta1 field */
 int DeltaObject::getDelta1() {
   return getWeightedDelta(this->delta1);
 }
@@ -56,9 +61,13 @@ int DeltaObject::getDelta4() {
   return getWeightedDelta(this->delta4);
 }
 
+void DeltaObject::setDelta0(int newDelta) {
+  this->delta0 = newDelta;
+}
+
 /* Prints out the given delta object in readable form */
 void DeltaObject::print() {
-  printf("Deltas, 1:%i, 2:%i, 3:%i, 4:%i\n", delta1, delta2, delta3, delta4);
+  printf("Deltas, 0: %i, 1:%i, 2:%i, 3:%i, 4:%i\n", delta0, delta1, delta2, delta3, delta4);
 }
 
 /* -------------------------------- Private --------------------------------- */
