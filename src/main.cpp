@@ -41,7 +41,11 @@ int main() {
 	shared_ptr<Program> texturedProgram = initProgram(
 		"assets/test_vs.glsl", "assets/test_fs.glsl");
 
-	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(0, 0, 0));
+	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(10, 0, 0));
+	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(0, 10, 0));
+	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(-10, 0, 0));
+	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(0, -10, 0));
+	texturedProgram->generateColouredPrism(1, 1, 1, make_shared<Point>(0, 0, 0));
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
 	shared_ptr<Program> untexturedProgram = initProgram(
@@ -53,13 +57,6 @@ int main() {
 	   Holds an instance of the view matrix. */
 	init_camera(0.0f, 0.0f, 10.0f, 2.0f);
 
-	GLfloat matrix[] = {
-		1.0f, 0.0f, 0.0f, 0.0f, // first column
-		0.0f, 1.0f, 0.0f, 0.0f, // second column
-		0.0f, 0.0f, 1.0f, 0.0f, // third column
-		0.0f, 0.0f, 8.0f, 1.0f	// fourth column
-	};
-
 	/* Retrieve the translation matrix from the initialised camera */
 	mat4 view_mat = getTranslationMatrix();
 
@@ -69,7 +66,6 @@ int main() {
 	/* Attach the newly created uniforms to all programs */
 	attachUniforms("view", view_mat.m);
 	attachUniforms("proj", proj_mat.m);
-	attachUniforms("pos", matrix);
 
 	//glEnable( GL_CULL_FACE ); // cull face
 	//glCullFace( GL_BACK );		// cull back face

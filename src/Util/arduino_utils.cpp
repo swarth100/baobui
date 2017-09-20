@@ -189,7 +189,7 @@ void setupSerial(const char* portname) {
 	if (serialFd < 0)
 	{
     fprintf(stderr, "Serial Port Error %d\n", errno);
-    fprintf(stderr, "Could not open %s: %s", portname, strerror (errno));
+    fprintf(stderr, "Could not open %s: %s\n", portname, strerror (errno));
     isSerialReady = false;
 	}
 
