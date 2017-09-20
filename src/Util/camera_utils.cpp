@@ -20,7 +20,7 @@ void init_camera(float x, float y, float z, float speed) {
   /* */
   cam_yaw = 0.0f;				// y-rotation in degrees
 
-  extensionAngle = 100;
+  extensionAngle = 80;
   extensionSpeed = 25.0f;
 }
 

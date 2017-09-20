@@ -6,6 +6,8 @@ shared_ptr<ReferencePoint> upperLevel;
 
 int serialFd;
 
+bool isSerialReady;
+
 void setupArduino() {
   /* Bottom Level */
 	shared_ptr<ArduinoPoint> lowerCenter = make_shared<ArduinoPoint>(95, 90, 75, 45, ArduinoPoint::CENTER);
@@ -151,49 +153,54 @@ set_blocking (int fd, int should_block)
 /* */
 void setupSerial(const char* portname) {
   serialFd = open (portname, O_RDWR | O_NOCTTY | O_SYNC);
+  isSerialReady = true;
 	if (serialFd < 0)
 	{
-    fprintf(stderr, "error %d opening %s: %s", errno, portname, strerror (errno));
-    exit(-1);
+    fprintf(stderr, "Serial Port Error %d\n", errno);
+    fprintf(stderr, "Could not open %s: %s", portname, strerror (errno));
+    isSerialReady = false;
 	}
 
-	set_interface_attribs (serialFd, B115200, 0);  // set speed to 115,200 bps, 8n1 (no parity)
-	set_blocking (serialFd, 0);                // set no blocking
+  if (isSerialReady) {
+  	set_interface_attribs (serialFd, B115200, 0);  // set speed to 115,200 bps, 8n1 (no parity)
+  	set_blocking (serialFd, 0);                // set no blocking
+  }
 }
 
 /* */
 void sendByteData(uint8_t* data) {
-  /* */
-	uint8_t bytes_to_send[1];
-	bytes_to_send[0] = 200;
+  if (isSerialReady) {
+    /* */
+  	uint8_t bytes_to_send[1];
+  	bytes_to_send[0] = 200;
 
-  /* */
-  write (serialFd, bytes_to_send, 1);
-	usleep ((1 + 25) * 100);
+    /* */
+    write (serialFd, bytes_to_send, 1);
+  	usleep ((1 + 25) * 100);
 
-  /* */
-	write (serialFd, data, 5);
-	usleep ((5 + 25) * 100);
+    /* */
+  	write (serialFd, data, 5);
+  	usleep ((5 + 25) * 100);
 
-  free(data);
+    free(data);
+  }
 }
 
 /* */
 void readByteData() {
-  int bytes_avail;
-  ioctl(serialFd, FIONREAD, &bytes_avail);
-  if (bytes_avail >= 6) {
-    uint8_t auth [1];
-    read (serialFd, auth, sizeof auth);
+  if (isSerialReady) {
+    int bytes_avail;
+    ioctl(serialFd, FIONREAD, &bytes_avail);
+    if (bytes_avail >= 6) {
+      uint8_t auth [1];
+      read (serialFd, auth, sizeof auth);
 
-    if (auth[0] == 201) {
-      // printf("ioctl: %i\n", bytes_avail);
-      uint8_t buf [5];
-      read (serialFd, buf, sizeof buf);  // read up to 100 characters if ready to read
-      printf("%i %i %i %i %i\n", buf[0], buf[1], buf[2], buf[3], buf[4]);
+      if (auth[0] == 201) {
+        uint8_t buf [5];
+        read (serialFd, buf, sizeof buf);  // read up to 100 characters if ready to read
+        printf("%i %i %i %i %i\n", buf[0], buf[1], buf[2], buf[3], buf[4]);
 
-      // sendByteData();
-
+      }
     }
   }
 }
