@@ -36,6 +36,10 @@ void ArduinoPoint::computeDeltas(shared_ptr<ArduinoPoint> centerPtr) {
   this->delta = make_shared<DeltaObject>(delta1, delta2, delta3, delta4, isHorizontal);
 }
 
+void ArduinoPoint::setExtensionAngle(int newAngle) {
+  this->delta->setDelta0(newAngle);
+}
+
 /* Debug print method */
 void ArduinoPoint::print() {
   printf("Deltas, 1:%i, 2:%i, 3:%i, 4:%i\n", servo1 + delta->getDelta1(), servo2 + delta->getDelta2(), servo3 + delta->getDelta3(), servo4 + delta->getDelta4());
@@ -43,7 +47,7 @@ void ArduinoPoint::print() {
 
 uint8_t* ArduinoPoint::createBuffer() {
   uint8_t* retBuffer = (uint8_t*) malloc(sizeof (uint8_t) * 5);
-	retBuffer[0] = 20;
+	retBuffer[0] = delta->getDelta0();
   retBuffer[1] = servo1 + delta->getDelta1();
   retBuffer[2] = servo2 + delta->getDelta2();
   retBuffer[3] = servo3 + delta->getDelta3();

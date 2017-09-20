@@ -120,10 +120,12 @@ int main() {
 			shared_ptr<Point> cameraPosition = getCamera();
 			cameraPosition->print();
 			shared_ptr<ReferencePoint> refPos = determineArduinoDeltas(cameraPosition);
-			refPos->getInnerArduinoData()->print();
+			shared_ptr<ArduinoPoint> refArduino = refPos->getInnerArduinoData();
+			refArduino->setExtensionAngle(50);
+			refArduino->print();
 
 			/* Send the current buffer data information to arduino */
-			sendByteData(refPos->getInnerArduinoData()->createBuffer());
+			sendByteData(refArduino->createBuffer());
 		}
 
 		if ( GLFW_PRESS == glfwGetKey(g_window, GLFW_KEY_ESCAPE)) {

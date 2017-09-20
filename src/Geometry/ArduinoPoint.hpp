@@ -29,6 +29,7 @@ public:
 
   /* Public methods */
   void computeDeltas(shared_ptr<ArduinoPoint>);
+  void setExtensionAngle(int angle);
   void print();
 
   uint8_t* createBuffer();

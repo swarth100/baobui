@@ -17,14 +17,18 @@ public:
   void print();
 
   /* Public getters */
+  int getDelta0();
   int getDelta1();
   int getDelta2();
   int getDelta3();
   int getDelta4();
 
+  /* Public setter */
+  void setDelta0(int newDelta);
+
 private:
   /* Private fields */
-  int delta1, delta2, delta3, delta4;
+  int delta0, delta1, delta2, delta3, delta4;
 
   float refDelta;
   bool isHorizontal;
