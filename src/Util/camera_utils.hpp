@@ -12,7 +12,11 @@ shared_ptr<Point> getCamera();
 
 mat4 getTranslationMatrix();
 
+int getExtensionAngle();
+
 /* Helper functions */
 bool updateCameraPos(int index, bool increase, float elapsed_seconds);
+
+void moveExtension(bool isExtending, float elapsed_seconds);
 
 #endif

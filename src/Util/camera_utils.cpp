@@ -5,6 +5,9 @@ float cam_yaw_speed;
 float cam_pos[3];
 float cam_yaw;
 
+float extensionAngle;
+float extensionSpeed;
+
 void init_camera(float x, float y, float z, float speed) {
   cam_speed = speed;			 // 1 unit per second
 	cam_yaw_speed = 10.0f; // 10 degrees per second
@@ -16,6 +19,9 @@ void init_camera(float x, float y, float z, float speed) {
 
   /* */
   cam_yaw = 0.0f;				// y-rotation in degrees
+
+  extensionAngle = 100;
+  extensionSpeed = 25.0f;
 }
 
 /* */
@@ -45,11 +51,19 @@ bool update_camera(GLFWwindow* g_window, double elapsed_seconds) {
 		updateCameraPos(2, true, elapsed_seconds);
 		cam_moved = true;
 	}
-	if (glfwGetKey(g_window, GLFW_KEY_A)) {
+  if (glfwGetKey(g_window, GLFW_KEY_A)) {
+    moveExtension(false, elapsed_seconds);
+    cam_moved = true;
+	}
+	if (glfwGetKey(g_window, GLFW_KEY_D)) {
+    moveExtension(true, elapsed_seconds);
+    cam_moved = true;
+	}
+	if (glfwGetKey(g_window, GLFW_KEY_R)) {
 		cam_yaw += cam_yaw_speed * elapsed_seconds;
 		cam_moved = true;
 	}
-	if (glfwGetKey(g_window, GLFW_KEY_D)) {
+	if (glfwGetKey(g_window, GLFW_KEY_T)) {
 		cam_yaw -= cam_yaw_speed * elapsed_seconds;
 		cam_moved = true;
 	}
@@ -76,6 +90,10 @@ bool updateCameraPos(int index, bool increase, float elapsed_seconds) {
   return true;
 }
 
+int getExtensionAngle() {
+  return (int) extensionAngle;
+}
+
 /* */
 shared_ptr<Point> getCamera() {
   return make_shared<Point>(cam_pos[0], cam_pos[1], cam_pos[2]);
@@ -88,4 +106,19 @@ mat4 getTranslationMatrix() {
 	mat4 view_mat = R * T;
 
   return view_mat;
+}
+
+/* */
+void moveExtension(bool isExtending, float elapsed_seconds) {
+  int oldAngle = extensionAngle;
+
+  if (isExtending) {
+    extensionAngle += extensionSpeed * elapsed_seconds;
+  } else {
+    extensionAngle -= extensionSpeed * elapsed_seconds;
+  }
+
+  if (extensionAngle < 0 || extensionAngle > 100) {
+    extensionAngle = oldAngle;
+  }
 }

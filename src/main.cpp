@@ -121,8 +121,7 @@ int main() {
 			cameraPosition->print();
 			shared_ptr<ReferencePoint> refPos = determineArduinoDeltas(cameraPosition);
 			shared_ptr<ArduinoPoint> refArduino = refPos->getInnerArduinoData();
-			refArduino->setExtensionAngle(50);
-			refArduino->print();
+			refArduino->setExtensionAngle(getExtensionAngle());
 
 			/* Send the current buffer data information to arduino */
 			sendByteData(refArduino->createBuffer());
