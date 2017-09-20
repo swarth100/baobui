@@ -17,7 +17,7 @@ shared_ptr<DeltaObject> getDeltaZDiff(shared_ptr<DeltaObject>, shared_ptr<DeltaO
 int set_interface_attribs (int fd, int speed, int parity);
 void set_blocking (int fd, int should_block);
 
-void sendByteData(uint8_t*);
-void readByteData();
+void sendByteData(uint8_t*, double);
+uint8_t* readByteData();
 
 #endif

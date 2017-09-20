@@ -124,7 +124,7 @@ int main() {
 			refArduino->setExtensionAngle(getExtensionAngle());
 
 			/* Send the current buffer data information to arduino */
-			sendByteData(refArduino->createBuffer());
+			sendByteData(refArduino->createBuffer(), current_seconds);
 		}
 
 		if ( GLFW_PRESS == glfwGetKey(g_window, GLFW_KEY_ESCAPE)) {
@@ -134,7 +134,9 @@ int main() {
 		glfwSwapBuffers(g_window);
 
 		/* Read the data sent over by arduino */
-		readByteData();
+		uint8_t* readData = readByteData();
+		if (readData != NULL)
+			free (readData);
 	}
 
 	// close GL context and any other GLFW resources
