@@ -82,39 +82,39 @@ GLfloat* getExtendedPrismTexture(float width, float height, float depth) {
 		0.0f, 0.0f,
 		depth, 0.0f,
 		depth, height, // ok 1
-	  0.0f, 1.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f, // ok 2
-		1.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f, // ok 3
-		0.0f, 1.0f,
+	  0.0f, height,
+		width, 0.0f,
+		width, height, // ok 2
+		width, 0.0f,
+		0.0f, depth,
+		width, depth, // ok 3
+		0.0f, height,
 		0.0f, 0.0f,
-		1.0f, 0.0f, // ok 4
+		width, 0.0f, // ok 4
 		0.0f, 0.0f,
-		1.0f, 1.0f,
-		0.0f, 1.0f, // ok 5
+		depth, height,
+		0.0f, height, // ok 5
 		0.0f, 0.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f, // ok 6
-		0.0f, 1.0f,
+		width, 0.0f,
+		width, height, // ok 6
+		0.0f, height,
 		0.0f, 0.0f,
-		1.0f, 0.0f, // ok 7
-		1.0f, 1.0f,
+		width, 0.0f, // ok 7
+		depth, height,
 		0.0f, 0.0f,
-		0.0f, 1.0f, // ok 8
+		0.0f, height, // ok 8
 		0.0f, 0.0f,
-		1.0f, 1.0f,
-		1.0f, 0.0f, // ok 9
+		depth, height,
+		depth, 0.0f, // ok 9
 		0.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f, // ok 10
+		0.0f, depth,
+		width, depth, // ok 10
 		0.0f, 0.0f,
-		1.0f, 1.0f,
-		1.0f, 0.0f, // ok 11
-		1.0f, 1.0f,
-		0.0f, 1.0f,
-		1.0f, 0.0f, // ok 12
+		width, depth,
+		width, 0.0f, // ok 11
+		width, height,
+		0.0f, height,
+		width, 0.0f, // ok 12
 	};
 
   GLfloat* returnArr;
