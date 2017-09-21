@@ -62,15 +62,15 @@ void Program::generatePrism(float width, float height, float depth, shared_ptr<P
 
 // NOTE: Will be deprecated in further versions
 /* Generates a new prism which accepts a secondary uniform for colour */
-void Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, GLuint textureFile, bool extendTexture) {
+void Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, GLuint textureFile, int textureExtension) {
 
   GLfloat* texcoords;
 
   // TODO: Refactor color generation
-  if (extendTexture) {
+  if (!textureExtension) {
   	texcoords = getExtendedPrismTexture(1, 1, 1);
   } else {
-    texcoords = getExtendedPrismTexture(width, height, depth);
+    texcoords = getExtendedPrismTexture(width/textureExtension, height/textureExtension, depth/textureExtension);
   }
 
   shared_ptr<Component> component = make_shared<Prism>(width, height, depth, center);

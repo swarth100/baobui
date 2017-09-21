@@ -45,21 +45,27 @@ int main() {
 	shared_ptr<Program> texturedProgram = initProgram("assets/test_vs.glsl", "assets/test2_fs.glsl");
 
 	GLuint cubeTex;
-	load_texture("assets/companionCube.png", &cubeTex);
+	load_texture("assets/img/companionCube.png", &cubeTex);
 
 	GLuint wallTex3;
-	load_texture("assets/grid3.png", &wallTex3);
+	load_texture("assets/img/grid3.png", &wallTex3);
 
-	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(10, 0, -48), wallTex3, false);
-	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(0, 10, -48), wallTex3, false);
-	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(-10, 0, -48), wallTex3, false);
-	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(0, -10, -48), wallTex3, false);
-	texturedProgram->generateTexturedPrism(2, 3, 4, make_shared<Point>(0, 0, 1), cubeTex, false);
+	GLuint wallTex3b;
+	load_texture("assets/img/grid3b.png", &wallTex3b);
+
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(10, 0, -24), wallTex3, 5);
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, 10, -24), wallTex3, 5);
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(-10, 0, -24), wallTex3, 5);
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, -10, -24), wallTex3, 5);
+
+	texturedProgram->generateTexturedPrism(200, 200, 0, make_shared<Point>(0, 0, -14), wallTex3b, 1);
+
+	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 10, 2), cubeTex, 0);
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
 	shared_ptr<Program> untexturedProgram = initProgram("assets/test2_vs.glsl", "assets/test_fs.glsl");
 
-	untexturedProgram->generateGrid(100, 1.0f);
+	//untexturedProgram->generateGrid(100, 1.0f);
 
 	/* Initialise the camera instance.
 	   Holds an instance of the view matrix. */

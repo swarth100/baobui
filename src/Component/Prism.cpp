@@ -96,7 +96,7 @@ GLfloat* getExtendedPrismTexture(float width, float height, float depth) {
 		0.0f, height, // ok 5
 		0.0f, 0.0f,
 		width, 0.0f,
-		width, height, // ok 6
+		width, depth, // ok 6
 		0.0f, height,
 		0.0f, 0.0f,
 		width, 0.0f, // ok 7
