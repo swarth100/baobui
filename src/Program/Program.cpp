@@ -41,6 +41,10 @@ void Program::draw() {
   for (it = componentList.begin(); it != componentList.end(); ++it){
     shared_ptr<Component> component = (*it);
 
+    /* */
+    glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, component->getTexture());
+
     /* For each component bind the relevant VAO and draw */
     glBindVertexArray(component->getVao());
     glDrawArrays(component->getType(), 0, component->getSize());
@@ -58,50 +62,26 @@ void Program::generatePrism(float width, float height, float depth, shared_ptr<P
 
 // NOTE: Will be deprecated in further versions
 /* Generates a new prism which accepts a secondary uniform for colour */
-void Program::generateColouredPrism(float width, float height, float depth, shared_ptr<Point> center) {
+void Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, GLuint textureFile, int textureExtension) {
+
+  GLfloat* texcoords;
 
   // TODO: Refactor color generation
-  GLfloat colours[] = { 1.0f, 0.0f, 0.0f,
-		                    0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-		                    0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f };
+  if (!textureExtension) {
+  	texcoords = getExtendedPrismTexture(1, 1, 1);
+  } else {
+    texcoords = getExtendedPrismTexture(width/textureExtension, height/textureExtension, depth/textureExtension);
+  }
 
   shared_ptr<Component> component = make_shared<Prism>(width, height, depth, center);
-  component->addVbo3(colours, 36);
+
+  component->addVbo3(texcoords, 36, 2);
+
+  component->addTexture(textureFile);
 
   componentList.push_back(component);
+
+  free(texcoords);
 }
 
 /* Given a start and ending Point, it generates a new Line Component adding
@@ -168,6 +148,9 @@ void Program::checkLinkStatus() {
 		print_programme_info_log( this->shader_programme );
 		exit(-1);
 	}
+
+  glDeleteShader(this->fs_Ref);
+  glDeleteShader(this->vs_Ref);
 }
 
 /* Checks for successful shader compilation */

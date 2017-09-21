@@ -16,6 +16,10 @@
 /* Logfile */
 #define GL_LOG_FILE "gl.log"
 
+/* */
+#define STB_IMAGE_IMPLEMENTATION
+#include "Util/stb_image.hpp"	// Sean Barrett's image loader - http://nothings.org/
+
 using namespace std;
 
 /* Keeps track of window size for things like the viewport and the mouse cursor */
@@ -38,16 +42,30 @@ int main() {
 	setupSerial("/dev/ttyACM0");
 
 	/* Initialise Program for textured Objects */
-	shared_ptr<Program> texturedProgram = initProgram(
-		"assets/test_vs.glsl", "assets/test_fs.glsl");
+	shared_ptr<Program> texturedProgram = initProgram("assets/test_vs.glsl", "assets/test2_fs.glsl");
 
-	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(0, 0, 0));
+	GLuint cubeTex;
+	load_texture("assets/img/companionCube.png", &cubeTex);
+
+	GLuint wallTex3;
+	load_texture("assets/img/grid3.png", &wallTex3);
+
+	GLuint wallTex3b;
+	load_texture("assets/img/grid3b.png", &wallTex3b);
+
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(10, 0, -24), wallTex3, 5);
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, 10, -24), wallTex3, 5);
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(-10, 0, -24), wallTex3, 5);
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, -10, -24), wallTex3, 5);
+
+	texturedProgram->generateTexturedPrism(200, 200, 0, make_shared<Point>(0, 0, -14), wallTex3b, 1);
+
+	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 10, 2), cubeTex, 0);
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
-	shared_ptr<Program> untexturedProgram = initProgram(
-		"assets/test2_vs.glsl", "assets/test_fs.glsl");
+	shared_ptr<Program> untexturedProgram = initProgram("assets/test2_vs.glsl", "assets/test_fs.glsl");
 
-	untexturedProgram->generateGrid(100, 1.0f);
+	//untexturedProgram->generateGrid(100, 1.0f);
 
 	/* Initialise the camera instance.
 	   Holds an instance of the view matrix. */

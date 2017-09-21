@@ -21,4 +21,6 @@ private:
   void generatePrism(float, float, float, shared_ptr<Point>);
 };
 
+GLfloat* getExtendedPrismTexture(float, float, float);
+
 #endif

@@ -2,6 +2,7 @@
 #define PROGRAM_H
 
 #include "../Util/Util.hpp"
+
 #include "../Component/Component.hpp"
 #include "../Component/Prism.hpp"
 #include "../Component/Line.hpp"
@@ -21,9 +22,11 @@ public:
 
   /* Program Component generation */
   void generatePrism(float, float, float, shared_ptr<Point> center);
-  void generateColouredPrism(float, float, float, shared_ptr<Point> center);
+  void generateTexturedPrism(float, float, float, shared_ptr<Point>, GLuint, int);
   void generateLine(shared_ptr<Point> start, shared_ptr<Point> end);
   void generateGrid(float maxItem, float separator);
+
+  GLuint shader_programme;
 
 private:
   /* Private fields */
@@ -32,7 +35,6 @@ private:
 
   list<shared_ptr<Component>> componentList;
 
-  GLuint shader_programme;
   GLuint vs_Ref;
   GLuint fs_Ref;
 

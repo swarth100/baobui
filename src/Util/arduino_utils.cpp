@@ -25,7 +25,7 @@ void setupArduino() {
 	shared_ptr<ArduinoPoint> lowerCenter = make_shared<ArduinoPoint>(95, 90, 75, 45, ArduinoPoint::CENTER);
 	lowerLevel = make_shared<ReferencePoint>(lowerCenter, ReferencePoint::LOWER);
 
-	lowerLevel->attachPoint(make_shared<ArduinoPoint>(90, 25, 130, 55, ArduinoPoint::TOP));
+	lowerLevel->attachPoint(make_shared<ArduinoPoint>(70, 25, 130, 55, ArduinoPoint::TOP));
 	lowerLevel->attachPoint(make_shared<ArduinoPoint>(95, 65, 90, 0, ArduinoPoint::RIGHT));
 	lowerLevel->attachPoint(make_shared<ArduinoPoint>(110, 140, 80, 45, ArduinoPoint::BOT));
 	lowerLevel->attachPoint(make_shared<ArduinoPoint>(110, 70, 90, 100, ArduinoPoint::LEFT));
@@ -34,7 +34,7 @@ void setupArduino() {
 	shared_ptr<ArduinoPoint> middleCenter = make_shared<ArduinoPoint>(70, 90, 20, 45, ArduinoPoint::CENTER);
 	middleLevel = make_shared<ReferencePoint>(middleCenter, ReferencePoint::MIDDLE);
 
-	middleLevel->attachPoint(make_shared<ArduinoPoint>(20, 10, 50, 55, ArduinoPoint::TOP));
+	middleLevel->attachPoint(make_shared<ArduinoPoint>(20, 10, 70, 55, ArduinoPoint::TOP));
 	middleLevel->attachPoint(make_shared<ArduinoPoint>(85, 70, 35, 0, ArduinoPoint::RIGHT));
 	middleLevel->attachPoint(make_shared<ArduinoPoint>(90, 140, 20, 45, ArduinoPoint::BOT));
 	middleLevel->attachPoint(make_shared<ArduinoPoint>(85, 75, 35, 100, ArduinoPoint::LEFT));
@@ -43,7 +43,7 @@ void setupArduino() {
 	shared_ptr<ArduinoPoint> upperCenter = make_shared<ArduinoPoint>(50, 100, 0, 45, ArduinoPoint::CENTER);
 	upperLevel = make_shared<ReferencePoint>(upperCenter, ReferencePoint::HIGHER);
 
-	upperLevel->attachPoint(make_shared<ArduinoPoint>(0, 10, 30, 55, ArduinoPoint::TOP));
+	upperLevel->attachPoint(make_shared<ArduinoPoint>(0, 10, 50, 55, ArduinoPoint::TOP));
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(60, 70, 20, 0, ArduinoPoint::RIGHT));
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(90, 140, 0, 45, ArduinoPoint::BOT));
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(60, 70, 20, 100, ArduinoPoint::LEFT));
@@ -189,7 +189,7 @@ void setupSerial(const char* portname) {
 	if (serialFd < 0)
 	{
     fprintf(stderr, "Serial Port Error %d\n", errno);
-    fprintf(stderr, "Could not open %s: %s", portname, strerror (errno));
+    fprintf(stderr, "Could not open %s: %s\n", portname, strerror (errno));
     isSerialReady = false;
 	}
 

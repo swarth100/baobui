@@ -12,6 +12,11 @@ GLuint Component::getVao() {
   return this->vao;
 }
 
+/* */
+GLuint Component::getTexture() {
+  return this->texture;
+}
+
 /* Getter for size, inherited from VBO */
 int Component::getSize() {
   return this->size;
@@ -23,19 +28,24 @@ GLenum Component::getType() {
 }
 
 /* Adds a type 2 Vbo */
-void Component::addVbo2(GLfloat* array, int size) {
-  this->addVbo(array, size, 2);
+void Component::addVbo2(GLfloat* array, int size, int vecNum) {
+  this->addVbo(array, size, 2, vecNum);
 }
 
 /* Adds a type 3 Vbo */
-void Component::addVbo3(GLfloat* array, int size) {
-  this->addVbo(array, size, 3);
+void Component::addVbo3(GLfloat* array, int size, int vecNum) {
+  this->addVbo(array, size, 3, vecNum);
+}
+
+/* */
+void Component::addTexture(GLuint textureFile) {
+	this->texture = textureFile;
 }
 
 /* -------------------------------- Private --------------------------------- */
 
 /* Initialises and adds a new VboElement */
-void Component::addVbo(GLfloat* array, int size, int VboType) {
+void Component::addVbo(GLfloat* array, int size, int VboType, int vecNum) {
   /* VboElement is initialised */
   shared_ptr<VboElement> vboElem = make_shared<VboElement>(array, size);
 
@@ -61,7 +71,7 @@ void Component::addVbo(GLfloat* array, int size, int VboType) {
 	glBindBuffer(GL_ARRAY_BUFFER, vboElem->getVbo());
 
   /* Note: 3 in the number of dimensions present in each point of the Vao */
-	glVertexAttribPointer(this->index, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(this->index, vecNum, GL_FLOAT, GL_FALSE, 0, NULL);
 
   /* The specific Vao index must be enabled after creation */
 	glEnableVertexAttribArray(this->index);

@@ -21,5 +21,5 @@ void Line::generateLine() {
   };
 
   /* Ensure the new line is added to the Component's Vao */
-  this->Component::addVbo2(points, 2);
+  this->Component::addVbo2(points, 2, 3);
 }
