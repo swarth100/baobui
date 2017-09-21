@@ -44,17 +44,17 @@ int main() {
 	/* Initialise Program for textured Objects */
 	shared_ptr<Program> texturedProgram = initProgram("assets/test_vs.glsl", "assets/test2_fs.glsl");
 
-	GLuint texture;
-	load_texture("assets/companionCube.png", &texture);
+	GLuint cubeTex;
+	load_texture("assets/companionCube.png", &cubeTex);
 
-	GLuint texture2;
-	load_texture("assets/grid3.png", &texture2);
+	GLuint wallTex3;
+	load_texture("assets/grid3.png", &wallTex3);
 
-	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(10, 0, 0), texture2);
-	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 10, 0), texture);
-	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(-10, 0, 0), texture2);
-	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, -10, 0), texture);
-	texturedProgram->generateTexturedPrism(1, 1, 1, make_shared<Point>(0, 0, 0), texture);
+	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(10, 0, -48), wallTex3);
+	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(0, 10, -48), wallTex3);
+	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(-10, 0, -48), wallTex3);
+	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(0, -10, -48), wallTex3);
+	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 0, 1), cubeTex);
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
 	shared_ptr<Program> untexturedProgram = initProgram("assets/test2_vs.glsl", "assets/test_fs.glsl");
