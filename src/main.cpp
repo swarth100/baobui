@@ -122,6 +122,15 @@ int main() {
 	GLuint tex;
 	( load_texture( "assets/companionCube.png", &tex ) );
 
+	GLuint tex2;
+	( load_texture( "assets/grid3.png", &tex2 ) );
+
+GLuint decalTexLocation = glGetUniformLocation(texturedProgram->shader_programme, "basic_texture");
+
+// Then bind the uniform samplers to texture units:
+glUseProgram(texturedProgram->shader_programme);
+glUniform1i(decalTexLocation, 0);
+
 	//glEnable( GL_CULL_FACE ); // cull face
 	//glCullFace( GL_BACK );		// cull back face
 	//glFrontFace( GL_CW );			// GL_CCW for counter clock-wise
@@ -145,6 +154,9 @@ int main() {
 		/* Wipe the drawing surface clear */
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, g_gl_width, g_gl_height);
+
+		glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
+		glBindTexture(GL_TEXTURE_2D, tex);
 
 		/* Iterate through all programs calling draw() on their components */
 		drawAllPrograms();

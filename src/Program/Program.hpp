@@ -25,6 +25,8 @@ public:
   void generateLine(shared_ptr<Point> start, shared_ptr<Point> end);
   void generateGrid(float maxItem, float separator);
 
+  GLuint shader_programme;
+
 private:
   /* Private fields */
   const char* vertex_shader;
@@ -32,7 +34,6 @@ private:
 
   list<shared_ptr<Component>> componentList;
 
-  GLuint shader_programme;
   GLuint vs_Ref;
   GLuint fs_Ref;
 
