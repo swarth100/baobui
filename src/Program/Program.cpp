@@ -61,45 +61,48 @@ void Program::generatePrism(float width, float height, float depth, shared_ptr<P
 void Program::generateColouredPrism(float width, float height, float depth, shared_ptr<Point> center) {
 
   // TODO: Refactor color generation
-  GLfloat colours[] = { 1.0f, 0.0f, 0.0f,
-		                    0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-		                    0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f,
-												1.0f, 0.0f, 0.0f,
-												0.0f, 1.0f, 0.0f,
-												0.0f, 0.0f, 1.0f };
+	GLfloat texcoords[] = {
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f, // ok 1
+	  0.0f, 1.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f, // ok 2
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f, // ok 3
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f, // ok 4
+		0.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f, // ok 5
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f, // ok 6
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f, // ok 7
+		1.0f, 1.0f,
+		0.0f, 0.0f,
+		0.0f, 1.0f, // ok 8
+		0.0f, 0.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f, // ok 9
+		0.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f, // ok 10
+		0.0f, 0.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f, // ok 11
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		1.0f, 0.0f, // ok 12
+	};
 
   shared_ptr<Component> component = make_shared<Prism>(width, height, depth, center);
-  component->addVbo3(colours, 36, 3);
+
+  component->addVbo3(texcoords, 36, 2);
 
   componentList.push_back(component);
 }
