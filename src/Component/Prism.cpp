@@ -25,34 +25,34 @@ void Prism::generatePrism(float width, float height, float depth, shared_ptr<Poi
     width, height, 0.0f, /* Triangle 2 start */
     0.0f, 0.0f, 0.0f,
     0.0f, height, 0.0f,  /* Triangle 2 end */
-    width, 0.0f, depth,  /* ... */
+    width, 0.0f, depth,  /* 3 */
     0.0f, 0.0f, 0.0f,
     width, 0.0f, 0.0f,
-    width, height, 0.0f,
+    width, height, 0.0f, /* 4 */
     width, 0.0f, 0.0f,
     0.0f, 0.0f, 0.0f,
-    0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, /* 5 */
     0.0f, height, depth,
     0.0f, height, 0.0f,
-    width, 0.0f, depth,
+    width, 0.0f, depth, /* 6 */
     0.0f, 0.0f, depth,
     0.0f, 0.0f, 0.0f,
-    0.0f, height, depth,
+    0.0f, height, depth, /* 7 */
     0.0f, 0.0f, depth,
     width, 0.0f, depth,
-    width, height, depth,
+    width, height, depth, /* 8 */
     width, 0.0f, 0.0f,
     width, height, 0.0f,
-    width, 0.0f, 0.0f,
+    width, 0.0f, 0.0f, /* 9 */
     width, height, depth,
     width, 0.0f, depth,
-    width, height, depth,
+    width, height, depth, /* 10 */
     width, height, 0.0f,
     0.0f, height, 0.0f,
-    width, height, depth,
+    width, height, depth, /* 11 */
     0.0f, height, 0.0f,
     0.0f, height, depth,
-    width, height, depth,
+    width, height, depth, /* 12 */
     0.0f, height, depth,
     width, 0.0f, depth
   };
@@ -74,4 +74,53 @@ void Prism::generatePrism(float width, float height, float depth, shared_ptr<Poi
 
   /* Ensure the new prism is added to the Component's Vao */
   this->Component::addVbo3(points, 36, 3);
+}
+
+GLfloat* getExtendedPrismTexture(float width, float height, float depth) {
+  /* */
+  GLfloat texcoords[]  = {
+		0.0f, 0.0f,
+		depth, 0.0f,
+		depth, height, // ok 1
+	  0.0f, 1.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f, // ok 2
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f, // ok 3
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f, // ok 4
+		0.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f, // ok 5
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f, // ok 6
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f, // ok 7
+		1.0f, 1.0f,
+		0.0f, 0.0f,
+		0.0f, 1.0f, // ok 8
+		0.0f, 0.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f, // ok 9
+		0.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f, // ok 10
+		0.0f, 0.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f, // ok 11
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		1.0f, 0.0f, // ok 12
+	};
+
+  GLfloat* returnArr;
+
+  returnArr = (GLfloat*) malloc(36 * 2 * sizeof(GLfloat));
+  memcpy(returnArr, texcoords, sizeof(texcoords));
+
+  return returnArr;
 }

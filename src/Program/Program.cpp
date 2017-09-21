@@ -62,47 +62,16 @@ void Program::generatePrism(float width, float height, float depth, shared_ptr<P
 
 // NOTE: Will be deprecated in further versions
 /* Generates a new prism which accepts a secondary uniform for colour */
-void Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, GLuint textureFile) {
+void Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, GLuint textureFile, bool extendTexture) {
+
+  GLfloat* texcoords;
 
   // TODO: Refactor color generation
-	GLfloat texcoords[] = {
-		0.0f, 0.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f, // ok 1
-	  0.0f, 1.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f, // ok 2
-		1.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f, // ok 3
-		0.0f, 1.0f,
-		0.0f, 0.0f,
-		1.0f, 0.0f, // ok 4
-		0.0f, 0.0f,
-		1.0f, 1.0f,
-		0.0f, 1.0f, // ok 5
-		0.0f, 0.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f, // ok 6
-		0.0f, 1.0f,
-		0.0f, 0.0f,
-		1.0f, 0.0f, // ok 7
-		1.0f, 1.0f,
-		0.0f, 0.0f,
-		0.0f, 1.0f, // ok 8
-		0.0f, 0.0f,
-		1.0f, 1.0f,
-		1.0f, 0.0f, // ok 9
-		0.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f, // ok 10
-		0.0f, 0.0f,
-		1.0f, 1.0f,
-		1.0f, 0.0f, // ok 11
-		1.0f, 1.0f,
-		0.0f, 1.0f,
-		1.0f, 0.0f, // ok 12
-	};
+  if (extendTexture) {
+  	texcoords = getExtendedPrismTexture(1, 1, 1);
+  } else {
+    texcoords = getExtendedPrismTexture(width, height, depth);
+  }
 
   shared_ptr<Component> component = make_shared<Prism>(width, height, depth, center);
 
@@ -111,6 +80,8 @@ void Program::generateTexturedPrism(float width, float height, float depth, shar
   component->addTexture(textureFile);
 
   componentList.push_back(component);
+
+  free(texcoords);
 }
 
 /* Given a start and ending Point, it generates a new Line Component adding

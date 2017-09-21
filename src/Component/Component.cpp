@@ -19,7 +19,8 @@ GLuint Component::getTexture() {
 
 /* Getter for size, inherited from VBO */
 int Component::getSize() {
-  return this->size;
+  // return this->size;
+  return 3;
 }
 
 /* Getter for type, inherited from VBO */

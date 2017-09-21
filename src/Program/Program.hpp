@@ -22,7 +22,7 @@ public:
 
   /* Program Component generation */
   void generatePrism(float, float, float, shared_ptr<Point> center);
-  void generateTexturedPrism(float, float, float, shared_ptr<Point>, GLuint);
+  void generateTexturedPrism(float, float, float, shared_ptr<Point>, GLuint, bool);
   void generateLine(shared_ptr<Point> start, shared_ptr<Point> end);
   void generateGrid(float maxItem, float separator);
 

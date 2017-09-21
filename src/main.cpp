@@ -50,11 +50,11 @@ int main() {
 	GLuint wallTex3;
 	load_texture("assets/grid3.png", &wallTex3);
 
-	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(10, 0, -48), wallTex3);
-	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(0, 10, -48), wallTex3);
-	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(-10, 0, -48), wallTex3);
-	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(0, -10, -48), wallTex3);
-	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 0, 1), cubeTex);
+	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(10, 0, -48), wallTex3, false);
+	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(0, 10, -48), wallTex3, false);
+	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(-10, 0, -48), wallTex3, false);
+	texturedProgram->generateTexturedPrism(10, 10, 100, make_shared<Point>(0, -10, -48), wallTex3, false);
+	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 0, 1), cubeTex, true);
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
 	shared_ptr<Program> untexturedProgram = initProgram("assets/test2_vs.glsl", "assets/test_fs.glsl");
