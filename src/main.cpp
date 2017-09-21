@@ -13,11 +13,12 @@
 #include "Geometry/ReferencePoint.hpp"
 #include "Program/Program.hpp"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "Util/stb_image.h"	// Sean Barrett's image loader - http://nothings.org/
-
 /* Logfile */
 #define GL_LOG_FILE "gl.log"
+
+/* */
+#define STB_IMAGE_IMPLEMENTATION
+#include "Util/stb_image.hpp"	// Sean Barrett's image loader - http://nothings.org/
 
 using namespace std;
 
@@ -27,55 +28,6 @@ int g_gl_height = 480;
 
 /* Window instance */
 GLFWwindow *g_window = NULL;
-
-bool load_texture( const char *file_name, GLuint *tex ) {
-	int x, y, n;
-	int force_channels = 4;
-	unsigned char *image_data = stbi_load( file_name, &x, &y, &n, force_channels );
-	if ( !image_data ) {
-		fprintf( stderr, "ERROR: could not load %s\n", file_name );
-		return false;
-	}
-	// NPOT check
-	if ( ( x & ( x - 1 ) ) != 0 || ( y & ( y - 1 ) ) != 0 ) {
-		fprintf( stderr, "WARNING: texture %s is not power-of-2 dimensions\n",
-						 file_name );
-	}
-
-	int width_in_bytes = x * 4;
-	unsigned char *top = NULL;
-	unsigned char *bottom = NULL;
-	unsigned char temp = 0;
-	int half_height = y / 2;
-
-	for ( int row = 0; row < half_height; row++ ) {
-		top = image_data + row * width_in_bytes;
-		bottom = image_data + ( y - row - 1 ) * width_in_bytes;
-		for ( int col = 0; col < width_in_bytes; col++ ) {
-			temp = *top;
-			*top = *bottom;
-			*bottom = temp;
-			top++;
-			bottom++;
-		}
-	}
-
-	glGenTextures( 1, tex );
-	glActiveTexture( GL_TEXTURE0 );
-	glBindTexture( GL_TEXTURE_2D, *tex );
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-								image_data );
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
-	glGenerateMipmap( GL_TEXTURE_2D );
-	GLfloat max_aniso = 0.0f;
-	glGetFloatv( GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_aniso );
-	// set the maximum!
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, max_aniso );
-	return true;
-}
 
 int main() {
 	restart_gl_log();
@@ -90,18 +42,22 @@ int main() {
 	setupSerial("/dev/ttyACM0");
 
 	/* Initialise Program for textured Objects */
-	shared_ptr<Program> texturedProgram = initProgram(
-		"assets/test_vs.glsl", "assets/test2_fs.glsl");
+	shared_ptr<Program> texturedProgram = initProgram("assets/test_vs.glsl", "assets/test2_fs.glsl");
 
-	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(10, 0, 0));
-	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(0, 10, 0));
-	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(-10, 0, 0));
-	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(0, -10, 0));
-	texturedProgram->generateColouredPrism(1, 1, 1, make_shared<Point>(0, 0, 0));
+	GLuint texture;
+	load_texture("assets/companionCube.png", &texture);
+
+	GLuint texture2;
+	load_texture("assets/grid3.png", &texture2);
+
+	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(10, 0, 0), texture2);
+	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 10, 0), texture);
+	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(-10, 0, 0), texture2);
+	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, -10, 0), texture);
+	texturedProgram->generateTexturedPrism(1, 1, 1, make_shared<Point>(0, 0, 0), texture);
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
-	shared_ptr<Program> untexturedProgram = initProgram(
-		"assets/test2_vs.glsl", "assets/test_fs.glsl");
+	shared_ptr<Program> untexturedProgram = initProgram("assets/test2_vs.glsl", "assets/test_fs.glsl");
 
 	untexturedProgram->generateGrid(100, 1.0f);
 
@@ -118,18 +74,6 @@ int main() {
 	/* Attach the newly created uniforms to all programs */
 	attachUniforms("view", view_mat.m);
 	attachUniforms("proj", proj_mat.m);
-
-	GLuint tex;
-	( load_texture( "assets/companionCube.png", &tex ) );
-
-	GLuint tex2;
-	( load_texture( "assets/grid3.png", &tex2 ) );
-
-GLuint decalTexLocation = glGetUniformLocation(texturedProgram->shader_programme, "basic_texture");
-
-// Then bind the uniform samplers to texture units:
-glUseProgram(texturedProgram->shader_programme);
-glUniform1i(decalTexLocation, 0);
 
 	//glEnable( GL_CULL_FACE ); // cull face
 	//glCullFace( GL_BACK );		// cull back face
@@ -154,9 +98,6 @@ glUniform1i(decalTexLocation, 0);
 		/* Wipe the drawing surface clear */
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, g_gl_width, g_gl_height);
-
-		glActiveTexture(GL_TEXTURE0 + 0); // Texture unit 0
-		glBindTexture(GL_TEXTURE_2D, tex);
 
 		/* Iterate through all programs calling draw() on their components */
 		drawAllPrograms();

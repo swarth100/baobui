@@ -13,7 +13,8 @@ public:
   Component();
 
   /* Getters for protected fields */
-  GLuint getVao ();
+  GLuint getVao();
+  GLuint getTexture();
   int getSize();
   GLenum getType();
 
@@ -21,12 +22,15 @@ public:
   void addVbo2(GLfloat* array, int size, int vecNum);
   void addVbo3(GLfloat* array, int size, int vecNum);
 
+  void addTexture(GLuint);
+
 protected:
   /* Protected fields */
   int index = 0;
   int size = 0;
 
   GLuint vao;
+  GLuint texture;
   GLenum type;
 
 private:

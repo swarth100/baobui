@@ -41,6 +41,10 @@ void Program::draw() {
   for (it = componentList.begin(); it != componentList.end(); ++it){
     shared_ptr<Component> component = (*it);
 
+    /* */
+    glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, component->getTexture());
+
     /* For each component bind the relevant VAO and draw */
     glBindVertexArray(component->getVao());
     glDrawArrays(component->getType(), 0, component->getSize());
@@ -58,7 +62,7 @@ void Program::generatePrism(float width, float height, float depth, shared_ptr<P
 
 // NOTE: Will be deprecated in further versions
 /* Generates a new prism which accepts a secondary uniform for colour */
-void Program::generateColouredPrism(float width, float height, float depth, shared_ptr<Point> center) {
+void Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, GLuint textureFile) {
 
   // TODO: Refactor color generation
 	GLfloat texcoords[] = {
@@ -103,6 +107,8 @@ void Program::generateColouredPrism(float width, float height, float depth, shar
   shared_ptr<Component> component = make_shared<Prism>(width, height, depth, center);
 
   component->addVbo3(texcoords, 36, 2);
+
+  component->addTexture(textureFile);
 
   componentList.push_back(component);
 }
