@@ -99,16 +99,7 @@ void Program::generateColouredPrism(float width, float height, float depth, shar
 												0.0f, 0.0f, 1.0f };
 
   shared_ptr<Component> component = make_shared<Prism>(width, height, depth, center);
-  component->addVbo3(colours, 36);
-
-  GLfloat matrix[] = {
-		1.0f, 0.0f, 0.0f, 0.0f, // first column
-		0.0f, 1.0f, 0.0f, 0.0f, // second column
-		0.0f, 0.0f, 1.0f, 0.0f, // third column
-		0.0f, 0.0f, 8.0f, 1.0f	// fourth column
-	};
-
-  component->addVbo3(matrix, 4);
+  component->addVbo3(colours, 36, 3);
 
   componentList.push_back(component);
 }
@@ -177,6 +168,9 @@ void Program::checkLinkStatus() {
 		print_programme_info_log( this->shader_programme );
 		exit(-1);
 	}
+
+  glDeleteShader(this->fs_Ref);
+  glDeleteShader(this->vs_Ref);
 }
 
 /* Checks for successful shader compilation */

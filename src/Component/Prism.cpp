@@ -57,13 +57,15 @@ void Prism::generatePrism(float width, float height, float depth, shared_ptr<Poi
     width, 0.0f, depth
   };
 
-  /* */
+  /* Add delta calculation based on the three dimensions of the cube */
   float dx = center->x - (width / 2);
   float dy = center->y - (height / 2);
   float dz = center->z - (depth / 2);
 
+  /* Retrieve the number of elements stored into the array of points */
   int pointNum = sizeof(points) / sizeof(float);
 
+  /* For each point scale the dimensions accordingly to the deltas */
   for (int i = 0; i < pointNum; i += 3) {
     points[i] += dx;
     points[i+1] += dy;
@@ -71,5 +73,5 @@ void Prism::generatePrism(float width, float height, float depth, shared_ptr<Poi
   }
 
   /* Ensure the new prism is added to the Component's Vao */
-  this->Component::addVbo3(points, 36);
+  this->Component::addVbo3(points, 36, 3);
 }

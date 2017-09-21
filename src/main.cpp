@@ -39,7 +39,7 @@ int main() {
 
 	/* Initialise Program for textured Objects */
 	shared_ptr<Program> texturedProgram = initProgram(
-		"assets/test_vs.glsl", "assets/test_fs.glsl");
+		"assets/test_vs.glsl", "assets/test2_fs.glsl");
 
 	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(10, 0, 0));
 	texturedProgram->generateColouredPrism(2, 2, 2, make_shared<Point>(0, 10, 0));

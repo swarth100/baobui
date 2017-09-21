@@ -18,8 +18,8 @@ public:
   GLenum getType();
 
   /* Methods to add a new Vbo to the system */
-  void addVbo2(GLfloat* array, int size);
-  void addVbo3(GLfloat* array, int size);
+  void addVbo2(GLfloat* array, int size, int vecNum);
+  void addVbo3(GLfloat* array, int size, int vecNum);
 
 protected:
   /* Protected fields */
@@ -31,7 +31,7 @@ protected:
 
 private:
   /* Private Vbo helper method */
-  void addVbo(GLfloat* array, int size, int type);
+  void addVbo(GLfloat* array, int size, int type, int vecNum);
 };
 
 #endif
