@@ -6,6 +6,7 @@
 #include "../Component/Component.hpp"
 #include "../Component/Prism.hpp"
 #include "../Component/Line.hpp"
+#include "../Component/Texture.hpp"
 
 #define MAX_GRID_ELEMENTS 100
 
@@ -20,9 +21,12 @@ public:
   /* Program Component draw */
   void draw();
 
+  /* Add an already generated component */
+  void addComponent(shared_ptr<Component>);
+
   /* Program Component generation */
   void generatePrism(float, float, float, shared_ptr<Point> center);
-  void generateTexturedPrism(float, float, float, shared_ptr<Point>, GLuint, float);
+  void generateTexturedPrism(float, float, float, shared_ptr<Point>, shared_ptr<Texture>, float);
   void generateLine(shared_ptr<Point> start, shared_ptr<Point> end);
   void generateGrid(float maxItem, float separator);
 

@@ -3,6 +3,7 @@
 
 #include "../Util/Util.hpp"
 #include "../Geometry/VboElement.hpp"
+#include "Texture.hpp"
 
 /* The Component class is a wrapper around Vaos.
    It handles creation of new Vbos ensuring they're loaded correctly into the
@@ -22,15 +23,17 @@ public:
   void addVbo2(GLfloat* array, int size, int vecNum);
   void addVbo3(GLfloat* array, int size, int vecNum);
 
-  void addTexture(GLuint);
+  void addTexture(shared_ptr<Texture>);
 
 protected:
   /* Protected fields */
   int index = 0;
   int size = 0;
 
+  int textureIndex = 0;
+
   GLuint vao;
-  GLuint texture;
+  shared_ptr<Texture> texture;
   GLenum type;
 
 private:

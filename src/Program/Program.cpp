@@ -51,6 +51,11 @@ void Program::draw() {
   }
 }
 
+/* */
+void Program::addComponent(shared_ptr<Component> component) {
+  componentList.push_back(component);
+}
+
 /* Generates a new prism of given dimensions and center */
 void Program::generatePrism(float width, float height, float depth, shared_ptr<Point> center) {
   /* Generate a new Prism Component with the given arguments */
@@ -62,7 +67,7 @@ void Program::generatePrism(float width, float height, float depth, shared_ptr<P
 
 // NOTE: Will be deprecated in further versions
 /* Generates a new prism which accepts a secondary uniform for colour */
-void Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, GLuint textureFile, float textureExtension) {
+void Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, shared_ptr<Texture> texture, float textureExtension) {
 
   GLfloat* texcoords;
 
@@ -77,7 +82,7 @@ void Program::generateTexturedPrism(float width, float height, float depth, shar
 
   component->addVbo3(texcoords, 36, 2);
 
-  component->addTexture(textureFile);
+  component->addTexture(texture);
 
   componentList.push_back(component);
 
