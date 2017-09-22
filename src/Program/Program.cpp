@@ -62,7 +62,7 @@ void Program::generatePrism(float width, float height, float depth, shared_ptr<P
 
 // NOTE: Will be deprecated in further versions
 /* Generates a new prism which accepts a secondary uniform for colour */
-void Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, GLuint textureFile, int textureExtension) {
+void Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, GLuint textureFile, float textureExtension) {
 
   GLfloat* texcoords;
 

@@ -47,18 +47,56 @@ int main() {
 	GLuint cubeTex;
 	load_texture("assets/img/companionCube.png", &cubeTex);
 
+	GLuint wallTex0;
+	load_texture("assets/img/grid0.png", &wallTex0);
+
+	GLuint wallTex0b;
+	load_texture("assets/img/grid0b.png", &wallTex0b);
+
 	GLuint wallTex3;
 	load_texture("assets/img/grid3.png", &wallTex3);
 
 	GLuint wallTex3b;
 	load_texture("assets/img/grid3b.png", &wallTex3b);
 
-	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(10, 0, -24), wallTex3, 5);
-	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, 10, -24), wallTex3, 5);
-	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(-10, 0, -24), wallTex3, 5);
-	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, -10, -24), wallTex3, 5);
+	GLuint signalLightBlue;
+	load_texture("assets/img/portalSignalLightBlue.png", &signalLightBlue);
 
-	texturedProgram->generateTexturedPrism(200, 200, 0, make_shared<Point>(0, 0, -14), wallTex3b, 1);
+	GLuint companionCubeHug;
+	load_texture("assets/img/Companion-Cube-portal-2.jpg", &companionCubeHug);
+
+	GLuint cakeIcon;
+	load_texture("assets/img/Chamber_icon_cake_on.png", &cakeIcon);
+
+
+	/* */
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(10, 0, -25), wallTex3, 5);
+	texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(10, 0, -0.25f), wallTex0b, 1.25f);
+
+	/* */
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, 10, -25), wallTex3, 5);
+	texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(0, 10, -0.25f), wallTex0b, 1.25f);
+
+	texturedProgram->generateTexturedPrism(1.25f, 1.25f, 0, make_shared<Point>(-3.13f, 6.85f, 0.01f), companionCubeHug, 0);
+	texturedProgram->generateTexturedPrism(1.25f, 1.25f, 0, make_shared<Point>(3.13f, 6.85f, 0.01f), cakeIcon, 0);
+
+	texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-0.6f, 6.875f, 0.01f), signalLightBlue, 0);
+	texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-0.6f, 5.625f, 0.01f), signalLightBlue, 0);
+
+	for (float i = 0; i >= -15; i-= 1.25f) {
+		texturedProgram->generateTexturedPrism(0.5f, 0, 0.5f, make_shared<Point>(-0.6f, 4.99f,  i - (1.25f/2)), signalLightBlue, 0);
+		}
+
+	/* */
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(-10, 0, -25), wallTex3, 5);
+	texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(-10, 0, -0.25f), wallTex0b, 1.25f);
+
+	/* */
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, -10, -25), wallTex3, 5);
+	texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(0, -10, -0.25f), wallTex0b, 1.25f);
+
+	/* */
+	texturedProgram->generateTexturedPrism(200, 200, 0, make_shared<Point>(0, 0, -15), wallTex3b, 1);
 
 	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 10, 2), cubeTex, 0);
 
