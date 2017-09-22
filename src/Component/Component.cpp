@@ -14,7 +14,7 @@ GLuint Component::getVao() {
 
 /* */
 GLuint Component::getTexture() {
-  return this->texture;
+  return this->texture->getTexture(this->textureIndex);
 }
 
 /* Getter for size, inherited from VBO */
@@ -38,8 +38,28 @@ void Component::addVbo3(GLfloat* array, int size, int vecNum) {
 }
 
 /* */
-void Component::addTexture(GLuint textureFile) {
-	this->texture = textureFile;
+void Component::addTexture(shared_ptr<Texture> texture) {
+	this->texture = texture;
+}
+
+/* */
+void Component::setTextureIndex(int newIndex) {
+  this->textureIndex = newIndex;
+}
+
+/* */
+void Component::addSubComponent(shared_ptr<Component> newSub) {
+  subComponentList.push_back(newSub);
+}
+
+/* */
+void Component::updateSubCompTexture(int newTextureIndex) {
+  list<shared_ptr<Component>>::iterator it;
+  for (it = subComponentList.begin(); it != subComponentList.end(); ++it){
+    shared_ptr<Component> component = (*it);
+
+    component->setTextureIndex(newTextureIndex);
+  }
 }
 
 /* -------------------------------- Private --------------------------------- */

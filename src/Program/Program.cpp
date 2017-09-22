@@ -51,18 +51,27 @@ void Program::draw() {
   }
 }
 
+/* */
+shared_ptr<Component> Program::addComponent(shared_ptr<Component> component) {
+  componentList.push_back(component);
+
+  return component;
+}
+
 /* Generates a new prism of given dimensions and center */
-void Program::generatePrism(float width, float height, float depth, shared_ptr<Point> center) {
+shared_ptr<Component> Program::generatePrism(float width, float height, float depth, shared_ptr<Point> center) {
   /* Generate a new Prism Component with the given arguments */
   shared_ptr<Component> component = make_shared<Prism>(width, height, depth, center);
 
   /* Add the newly created prism to the list of components held by the Program */
   componentList.push_back(component);
+
+  return addComponent(component);
 }
 
 // NOTE: Will be deprecated in further versions
 /* Generates a new prism which accepts a secondary uniform for colour */
-void Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, GLuint textureFile, int textureExtension) {
+shared_ptr<Component> Program::generateTexturedPrism(float width, float height, float depth, shared_ptr<Point> center, shared_ptr<Texture> texture, float textureExtension) {
 
   GLfloat* texcoords;
 
@@ -77,19 +86,23 @@ void Program::generateTexturedPrism(float width, float height, float depth, shar
 
   component->addVbo3(texcoords, 36, 2);
 
-  component->addTexture(textureFile);
+  component->addTexture(texture);
 
   componentList.push_back(component);
 
   free(texcoords);
+
+  return addComponent(component);
 }
 
 /* Given a start and ending Point, it generates a new Line Component adding
    it to the componentList */
-void Program::generateLine(shared_ptr<Point> start, shared_ptr<Point> end) {
+shared_ptr<Component> Program::generateLine(shared_ptr<Point> start, shared_ptr<Point> end) {
   shared_ptr<Component> component = make_shared<Line>(start, end);
 
   componentList.push_back(component);
+
+  return addComponent(component);
 }
 
 /* Generates a new grid of given max Size with each element separated by a given

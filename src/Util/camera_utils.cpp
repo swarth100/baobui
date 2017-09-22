@@ -4,9 +4,12 @@ float cam_speed;
 float cam_yaw_speed;
 float cam_pos[3];
 float cam_yaw;
+float cam_roll;
 
 float extensionAngle;
 float extensionSpeed;
+
+bool lockCamera;
 
 void init_camera(float x, float y, float z, float speed) {
   cam_speed = speed;			 // 1 unit per second
@@ -19,6 +22,10 @@ void init_camera(float x, float y, float z, float speed) {
 
   /* */
   cam_yaw = 0.0f;				// y-rotation in degrees
+  cam_roll = 0.0f;
+
+  /* */
+  lockCamera = true;
 
   extensionAngle = 80;
   extensionSpeed = 25.0f;
@@ -67,6 +74,20 @@ bool update_camera(GLFWwindow* g_window, double elapsed_seconds) {
 		cam_yaw -= cam_yaw_speed * elapsed_seconds;
 		cam_moved = true;
 	}
+  if (glfwGetKey(g_window, GLFW_KEY_G)) {
+		cam_roll += cam_yaw_speed * elapsed_seconds;
+		cam_moved = true;
+	}
+	if (glfwGetKey(g_window, GLFW_KEY_H)) {
+		cam_roll -= cam_yaw_speed * elapsed_seconds;
+		cam_moved = true;
+	}
+  if (glfwGetKey(g_window, GLFW_KEY_L)) {
+		lockCamera = true;
+	}
+	if (glfwGetKey(g_window, GLFW_KEY_U)) {
+		lockCamera = false;
+	}
 
 	return cam_moved;
 }
@@ -80,11 +101,13 @@ bool updateCameraPos(int index, bool increase, float elapsed_seconds) {
     cam_pos[index] -= cam_speed * elapsed_seconds;
   }
 
-  if (float_abs(cam_pos[0]) + float_abs(cam_pos[1]) > 10) {
-    cam_pos[index] = old_value;
-  }
-  if (cam_pos[2] < 5 || cam_pos[2] > 15) {
-    cam_pos[index] = old_value;
+  if (lockCamera) {
+    if (float_abs(cam_pos[0]) + float_abs(cam_pos[1]) > 10) {
+      cam_pos[index] = old_value;
+    }
+    if (cam_pos[2] < 5 || cam_pos[2] > 15) {
+      cam_pos[index] = old_value;
+    }
   }
 
   return true;
@@ -102,8 +125,9 @@ shared_ptr<Point> getCamera() {
 /* */
 mat4 getTranslationMatrix() {
   mat4 T = translate( identity_mat4(), vec3(-cam_pos[0], -cam_pos[1], -cam_pos[2]));
-	mat4 R = rotate_y_deg(identity_mat4(), -cam_yaw);
-	mat4 view_mat = R * T;
+	mat4 Ry = rotate_z_deg(identity_mat4(), -cam_yaw);
+  mat4 Rx = rotate_x_deg(identity_mat4(), -cam_roll);
+	mat4 view_mat = Rx * Ry * T;
 
   return view_mat;
 }
