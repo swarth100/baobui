@@ -22,12 +22,12 @@ public:
   void draw();
 
   /* Add an already generated component */
-  void addComponent(shared_ptr<Component>);
+  shared_ptr<Component> addComponent(shared_ptr<Component>);
 
   /* Program Component generation */
-  void generatePrism(float, float, float, shared_ptr<Point> center);
-  void generateTexturedPrism(float, float, float, shared_ptr<Point>, shared_ptr<Texture>, float);
-  void generateLine(shared_ptr<Point> start, shared_ptr<Point> end);
+  shared_ptr<Component> generatePrism(float, float, float, shared_ptr<Point> center);
+  shared_ptr<Component> generateTexturedPrism(float, float, float, shared_ptr<Point>, shared_ptr<Texture>, float);
+  shared_ptr<Component> generateLine(shared_ptr<Point> start, shared_ptr<Point> end);
   void generateGrid(float maxItem, float separator);
 
   GLuint shader_programme;

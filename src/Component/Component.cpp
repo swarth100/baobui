@@ -42,6 +42,26 @@ void Component::addTexture(shared_ptr<Texture> texture) {
 	this->texture = texture;
 }
 
+/* */
+void Component::setTextureIndex(int newIndex) {
+  this->textureIndex = newIndex;
+}
+
+/* */
+void Component::addSubComponent(shared_ptr<Component> newSub) {
+  subComponentList.push_back(newSub);
+}
+
+/* */
+void Component::updateSubCompTexture(int newTextureIndex) {
+  list<shared_ptr<Component>>::iterator it;
+  for (it = subComponentList.begin(); it != subComponentList.end(); ++it){
+    shared_ptr<Component> component = (*it);
+
+    component->setTextureIndex(newTextureIndex);
+  }
+}
+
 /* -------------------------------- Private --------------------------------- */
 
 /* Initialises and adds a new VboElement */

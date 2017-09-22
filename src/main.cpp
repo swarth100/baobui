@@ -44,14 +44,9 @@ int main() {
 	shared_ptr<Texture> cubeTexture = make_shared<Texture>();
 	cubeTexture->addTexture("assets/img/companionCube.png");
 
-	// GLuint cubeTex;
-	// load_texture("assets/img/companionCube.png", &cubeTex);
-	//
-	// GLuint wallTex0;
-	// load_texture("assets/img/grid0.png", &wallTex0);
-	//
-	// GLuint wallTex0b;
-	// load_texture("assets/img/grid0Gray.png", &wallTex0b);
+	shared_ptr<Texture> wallTexture = make_shared<Texture>();
+	wallTexture->addTexture("assets/img/grid3.png");
+
 	//
 	// GLuint wallTex0Blue;
 	// load_texture("assets/img/grid0Blue.png", &wallTex0Blue);

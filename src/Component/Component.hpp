@@ -24,6 +24,10 @@ public:
   void addVbo3(GLfloat* array, int size, int vecNum);
 
   void addTexture(shared_ptr<Texture>);
+  void setTextureIndex(int);
+
+  void addSubComponent(shared_ptr<Component>);
+  void updateSubCompTexture(int);
 
 protected:
   /* Protected fields */
@@ -35,6 +39,8 @@ protected:
   GLuint vao;
   shared_ptr<Texture> texture;
   GLenum type;
+
+  list<shared_ptr<Component>> subComponentList;
 
 private:
   /* Private Vbo helper method */
