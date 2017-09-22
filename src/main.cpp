@@ -62,6 +62,9 @@ int main() {
 	GLuint signalLightBlue;
 	load_texture("assets/img/portalSignalLightBlue.png", &signalLightBlue);
 
+	GLuint signalLightOrange;
+	load_texture("assets/img/portalSignalLightOrange.png", &signalLightOrange);
+
 	GLuint companionCubeHug;
 	load_texture("assets/img/Companion-Cube-portal-2.jpg", &companionCubeHug);
 
