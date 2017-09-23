@@ -10,6 +10,9 @@ float extensionAngle;
 float extensionSpeed;
 
 bool lockCamera;
+bool draggingCube;
+
+shared_ptr<Point> cubePos;
 
 void init_camera(float x, float y, float z, float speed) {
   cam_speed = speed;			 // 1 unit per second
@@ -26,6 +29,9 @@ void init_camera(float x, float y, float z, float speed) {
 
   /* */
   lockCamera = true;
+  draggingCube = true;
+
+  cubePos = make_shared<Point>(0, 0, 0);
 
   extensionAngle = 80;
   extensionSpeed = 25.0f;
@@ -110,6 +116,20 @@ bool updateCameraPos(int index, bool increase, float elapsed_seconds) {
     }
   }
 
+  if (draggingCube) {
+    switch (index) {
+      case 0:
+        cubePos->x = cam_pos[index];
+        break;
+      case 1:
+        cubePos->y = cam_pos[index];
+        break;
+      case 2:
+        //cubePos->z = cam_pos[index] - 5;
+        break;
+    }
+  }
+
   return true;
 }
 
@@ -120,6 +140,11 @@ int getExtensionAngle() {
 /* */
 shared_ptr<Point> getCamera() {
   return make_shared<Point>(cam_pos[0], cam_pos[1], cam_pos[2]);
+}
+
+/* */
+shared_ptr<Point> getCubePos() {
+  return cubePos;
 }
 
 /* */

@@ -5,6 +5,7 @@
 /* Component constructor initialises vao field */
 Component::Component() {
   glGenVertexArrays(1, &this->vao);
+  initTranslationMatrix();
 }
 
 /* Getter for VAO */
@@ -27,6 +28,10 @@ GLenum Component::getType() {
   return this->type;
 }
 
+GLfloat* Component::getDeltaPos() {
+  return this->deltapos;
+}
+
 /* Adds a type 2 Vbo */
 void Component::addVbo2(GLfloat* array, int size, int vecNum) {
   this->addVbo(array, size, 2, vecNum);
@@ -45,6 +50,13 @@ void Component::addTexture(shared_ptr<Texture> texture) {
 /* */
 void Component::setTextureIndex(int newIndex) {
   this->textureIndex = newIndex;
+}
+
+/* */
+void Component::setPos(shared_ptr<Point> newPos) {
+  this->deltapos[12] = newPos->x;
+  this->deltapos[13] = newPos->y;
+  this->deltapos[14] = newPos->z;
 }
 
 /* */
@@ -98,4 +110,21 @@ void Component::addVbo(GLfloat* array, int size, int VboType, int vecNum) {
 
   /* Increase the Vao index for the next Vbo */
   this->index = this->index + 1;
+}
+
+/* */
+void Component::initTranslationMatrix() {
+  GLfloat transMatrix[] = {
+    1.0f, 0.0f, 0.0f, 0.0f, // first column
+    0.0f, 1.0f, 0.0f, 0.0f, // second column
+    0.0f, 0.0f, 1.0f, 0.0f, // third column
+    0.0f, 0.0f, 0.0f, 1.0f	// fourth column
+  };
+
+  GLfloat* returnArr;
+
+  returnArr = (GLfloat*) malloc(sizeof(transMatrix) * sizeof(GLfloat));
+  memcpy(returnArr, transMatrix, sizeof(transMatrix));
+
+  this->deltapos = returnArr;
 }

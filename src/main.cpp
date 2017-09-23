@@ -31,6 +31,8 @@ shared_ptr<Component> rightButton;
 shared_ptr<Component> botButton;
 shared_ptr<Component> leftButton;
 
+shared_ptr<Component> companionCube;
+
 int main() {
 	restart_gl_log();
 
@@ -73,78 +75,79 @@ int main() {
 	signalTexture->addTexture("assets/img/portalSignalLightOrange.png");
 
 	/* ----- RIGHT BUTTON GENERATION ----- */
-	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(10, 0, -25), wallTexture, 5);
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(10, 0, -26), wallTexture, 5);
 
 	rightButton = make_shared<Component>();
 
 	/* Actual "button" component */
-	rightButton->addSubComponent(texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(10, 0, -0.25f), buttonTexture, 1.25f));
+	rightButton->addSubComponent(texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(10, 0, -1.25f), buttonTexture, 1.25f));
 
 	/* Side coloured trail */
-	rightButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(6.875f, -0.6f, 0.01f), signalTexture, 0));
-	rightButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(5.625f, -0.6f, 0.01f), signalTexture, 0));
-	for (float i = 0; i >= -15; i-= 1.25f) {
+	rightButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(6.875f, -0.6f, -0.99f), signalTexture, 0));
+	rightButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(5.625f, -0.6f, -0.99f), signalTexture, 0));
+	for (float i = -1; i >= -30; i-= 1.25f) {
 	 	rightButton->addSubComponent(texturedProgram->generateTexturedPrism(0, 0.5f, 0.5f, make_shared<Point>(4.99f, -0.6f,  i - (1.25f/2)), signalTexture, 0));
 	}
 
 	/* ----- TOP BUTTON GENERATION ----- */
-	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, 10, -25), wallTexture, 5);
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, 10, -26), wallTexture, 5);
 
 	/* Companion Cube icon */
-	texturedProgram->generateTexturedPrism(1.25f, 1.25f, 0.01f, make_shared<Point>(-3.13f, 6.85f, 0.01f), iconTexture, 0);
+	texturedProgram->generateTexturedPrism(1.25f, 1.25f, 0.01f, make_shared<Point>(-3.13f, 6.85f, -0.99f), iconTexture, 0);
 
 	/* Cake icon */
-	shared_ptr<Component> cakeIcon = texturedProgram->generateTexturedPrism(1.25f, 1.25f, 0.01f, make_shared<Point>(3.13f, 6.85f, 0.01f), iconTexture, 0);
+	shared_ptr<Component> cakeIcon = texturedProgram->generateTexturedPrism(1.25f, 1.25f, 0.01f, make_shared<Point>(3.13f, 6.85f, -0.99f), iconTexture, 0);
 	cakeIcon->setTextureIndex(1);
 
 	topButton = make_shared<Component>();
 
 	/* Actual "button" component */
-	topButton->addSubComponent(texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(0, 10, -0.25f), buttonTexture, 1.25f));
+	topButton->addSubComponent(texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(0, 10, -1.25f), buttonTexture, 1.25f));
 
 	/* Side coloured trail */
-	topButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-0.6f, 6.875f, 0.01f), signalTexture, 0));
-	topButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-0.6f, 5.625f, 0.01f), signalTexture, 0));
-	for (float i = 0; i >= -15; i-= 1.25f) {
+	topButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-0.6f, 6.875f, -0.99f), signalTexture, 0));
+	topButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-0.6f, 5.625f, -0.99f), signalTexture, 0));
+	for (float i = -1; i >= -30; i-= 1.25f) {
 	 	topButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0, 0.5f, make_shared<Point>(-0.6f, 4.99f,  i - (1.25f/2)), signalTexture, 0));
 	}
 
 	/* ----- LEFT BUTTON GENERATION ----- */
-	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(-10, 0, -25), wallTexture, 5);
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(-10, 0, -26), wallTexture, 5);
 	// texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(-10, 0, -0.25f), wallTex0b, 1.25f);
 
 	leftButton = make_shared<Component>();
 
 	/* Actual "button" component */
-	leftButton->addSubComponent(texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(-10, 0, -0.25f), buttonTexture, 1.25f));
+	leftButton->addSubComponent(texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(-10, 0, -1.25f), buttonTexture, 1.25f));
 
 	/* Side coloured trail */
-	leftButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-6.875f, -0.6f, 0.01f), signalTexture, 0));
-	leftButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-5.625f, -0.6f, 0.01f), signalTexture, 0));
-	for (float i = 0; i >= -15; i-= 1.25f) {
+	leftButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-6.875f, -0.6f, -0.99f), signalTexture, 0));
+	leftButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-5.625f, -0.6f, -0.99f), signalTexture, 0));
+	for (float i = -1; i >= -30; i-= 1.25f) {
 	 	leftButton->addSubComponent(texturedProgram->generateTexturedPrism(0, 0.5f, 0.5f, make_shared<Point>(-4.99f, -0.6f,  i - (1.25f/2)), signalTexture, 0));
 	}
 
 	/* ----- BOT BUTTON GENERATION ----- */
-	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, -10, -25), wallTexture, 5);
+	texturedProgram->generateTexturedPrism(10, 10, 50, make_shared<Point>(0, -10, -26), wallTexture, 5);
 
 	botButton = make_shared<Component>();
 
 	/* Actual "button" component */
-	botButton->addSubComponent(texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(0, -10, -0.25f), buttonTexture, 1.25f));
+	botButton->addSubComponent(texturedProgram->generateTexturedPrism(5, 5, 2, make_shared<Point>(0, -10, -1.25f), buttonTexture, 1.25f));
 
 	/* Side coloured trail */
-	botButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-0.6f, -6.875f, 0.01f), signalTexture, 0));
-	botButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-0.6f, -5.625f, 0.01f), signalTexture, 0));
-	for (float i = 0; i >= -15; i-= 1.25f) {
+	botButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-0.6f, -6.875f, -0.99f), signalTexture, 0));
+	botButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0.5f, 0, make_shared<Point>(-0.6f, -5.625f, -0.99f), signalTexture, 0));
+	for (float i = -1; i >= -30; i-= 1.25f) {
 	 	botButton->addSubComponent(texturedProgram->generateTexturedPrism(0.5f, 0, 0.5f, make_shared<Point>(-0.6f, -4.99f,  i - (1.25f/2)), signalTexture, 0));
 	}
 
 	/* Background gray component */
-	shared_ptr<Component> background = texturedProgram->generateTexturedPrism(200, 200, 0, make_shared<Point>(0, 0, -15), wallTexture, 1);
+	shared_ptr<Component> background = texturedProgram->generateTexturedPrism(200, 200, 0, make_shared<Point>(0, 0, -16), wallTexture, 1);
 	background->setTextureIndex(1);
 
-	texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 10, 2), cubeTexture, 0);
+	/* Companion cube */
+	companionCube = texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 0, 0.75f), cubeTexture, 0);
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
 	shared_ptr<Program> untexturedProgram = initProgram("assets/test2_vs.glsl", "assets/test_fs.glsl");
@@ -202,6 +205,7 @@ int main() {
 
 		/* Update the camera based on Key Press events */
 		bool cam_moved = update_camera(g_window, elapsed_seconds);
+		companionCube->setPos(getCubePos());
 
 		/* Update view matrix */
 		if (cam_moved) {

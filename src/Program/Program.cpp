@@ -41,14 +41,7 @@ void Program::draw() {
   for (it = componentList.begin(); it != componentList.end(); ++it){
     shared_ptr<Component> component = (*it);
 
-    GLfloat matrix[] = {
-  		1.0f, 0.0f, 0.0f, 0.0f, // first column
-  		0.0f, 1.0f, 0.0f, 0.0f, // second column
-  		0.0f, 0.0f, 1.0f, 0.0f, // third column
-  		0.0f, 0.0f, 0.0f, 1.0f	// fourth column
-  	};
-
-    this->attachUniform("deltapos", matrix);
+    this->attachUniform("deltapos", component->getDeltaPos());
 
     /* */
     glActiveTexture(GL_TEXTURE0);
