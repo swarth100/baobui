@@ -41,6 +41,15 @@ void Program::draw() {
   for (it = componentList.begin(); it != componentList.end(); ++it){
     shared_ptr<Component> component = (*it);
 
+    GLfloat matrix[] = {
+  		1.0f, 0.0f, 0.0f, 0.0f, // first column
+  		0.0f, 1.0f, 0.0f, 0.0f, // second column
+  		0.0f, 0.0f, 1.0f, 0.0f, // third column
+  		0.0f, 0.0f, 0.0f, 1.0f	// fourth column
+  	};
+
+    this->attachUniform("deltapos", matrix);
+
     /* */
     glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, component->getTexture());

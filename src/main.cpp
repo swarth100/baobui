@@ -168,6 +168,7 @@ int main() {
 	/* Attach the newly created uniforms to all programs */
 	attachUniforms("view", view_mat.m);
 	attachUniforms("proj", proj_mat.m);
+	attachUniforms("bob", view_mat.m);
 
 	//glEnable( GL_CULL_FACE ); // cull face
 	//glCullFace( GL_BACK );		// cull back face
