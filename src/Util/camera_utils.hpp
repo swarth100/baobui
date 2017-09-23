@@ -9,7 +9,7 @@ bool update_camera(GLFWwindow* g_window, double elapsed_seconds);
 void init_camera(float, float, float, float);
 
 shared_ptr<Point> getCamera();
-shared_ptr<Point> getCubePos();
+shared_ptr<Point> getCubePos(float);
 
 mat4 getTranslationMatrix();
 mat4 getProjectionMatrix();
