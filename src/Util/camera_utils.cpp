@@ -8,8 +8,12 @@ float cam_roll;
 
 float extensionAngle;
 float extensionSpeed;
+float cube_speed;
 
 bool lockCamera;
+bool draggingCube;
+
+shared_ptr<Point> cubePos;
 
 void init_camera(float x, float y, float z, float speed) {
   cam_speed = speed;			 // 1 unit per second
@@ -26,9 +30,13 @@ void init_camera(float x, float y, float z, float speed) {
 
   /* */
   lockCamera = true;
+  draggingCube = false;
+
+  cubePos = make_shared<Point>(0, 10, 0);
 
   extensionAngle = 80;
   extensionSpeed = 25.0f;
+  cube_speed = 2.0f;
 }
 
 /* */
@@ -110,6 +118,20 @@ bool updateCameraPos(int index, bool increase, float elapsed_seconds) {
     }
   }
 
+  if (draggingCube) {
+    switch (index) {
+      case 0:
+        cubePos->x = cam_pos[index];
+        break;
+      case 1:
+        cubePos->y = cam_pos[index];
+        break;
+      case 2:
+        cubePos->z = cam_pos[index] - 5;
+        break;
+    }
+  }
+
   return true;
 }
 
@@ -120,6 +142,16 @@ int getExtensionAngle() {
 /* */
 shared_ptr<Point> getCamera() {
   return make_shared<Point>(cam_pos[0], cam_pos[1], cam_pos[2]);
+}
+
+/* */
+shared_ptr<Point> getCubePos(float elapsed_seconds) {
+  if (!draggingCube) {
+    if (cubePos->z >= 0) {
+      cubePos->z -= cube_speed * elapsed_seconds;
+    }
+  }
+  return cubePos;
 }
 
 /* */
@@ -165,5 +197,11 @@ void moveExtension(bool isExtending, float elapsed_seconds) {
 
   if (extensionAngle < 0 || extensionAngle > 100) {
     extensionAngle = oldAngle;
+  }
+
+  if (extensionAngle < 50) {
+    draggingCube = true;
+  } else {
+    draggingCube = false;
   }
 }

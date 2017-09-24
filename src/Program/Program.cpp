@@ -41,6 +41,8 @@ void Program::draw() {
   for (it = componentList.begin(); it != componentList.end(); ++it){
     shared_ptr<Component> component = (*it);
 
+    this->attachUniform("deltapos", component->getDeltaPos());
+
     /* */
     glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, component->getTexture());

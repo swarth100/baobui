@@ -3,6 +3,7 @@
 
 #include "../Util/Util.hpp"
 #include "../Geometry/VboElement.hpp"
+#include "../Geometry/Point.hpp"
 #include "Texture.hpp"
 
 /* The Component class is a wrapper around Vaos.
@@ -18,6 +19,7 @@ public:
   GLuint getTexture();
   int getSize();
   GLenum getType();
+  GLfloat* getDeltaPos();
 
   /* Methods to add a new Vbo to the system */
   void addVbo2(GLfloat* array, int size, int vecNum);
@@ -25,6 +27,7 @@ public:
 
   void addTexture(shared_ptr<Texture>);
   void setTextureIndex(int);
+  void setPos(shared_ptr<Point>);
 
   void addSubComponent(shared_ptr<Component>);
   void updateSubCompTexture(int);
@@ -37,6 +40,7 @@ protected:
   int textureIndex = 0;
 
   GLuint vao;
+  GLfloat* deltapos;
   shared_ptr<Texture> texture;
   GLenum type;
 
@@ -45,6 +49,8 @@ protected:
 private:
   /* Private Vbo helper method */
   void addVbo(GLfloat* array, int size, int type, int vecNum);
+
+  void initTranslationMatrix();
 };
 
 #endif
