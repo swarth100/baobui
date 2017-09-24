@@ -31,9 +31,13 @@ shared_ptr<Component> rightButton;
 shared_ptr<Component> botButton;
 shared_ptr<Component> leftButton;
 
+shared_ptr<Component> targetButton;
+list<shared_ptr<Component>> availableButtons;
+
 shared_ptr<Component> companionCube;
 
 void generateModels();
+void updateButtons(shared_ptr<Component>, int);
 
 int main() {
 	restart_gl_log();
@@ -49,6 +53,8 @@ int main() {
 
 	/* Set up the models in the virtual layout */
 	generateModels();
+
+	targetButton = leftButton;
 
 	/* Initialise the camera instance.
 	   Holds an instance of the view matrix. */
@@ -133,14 +139,17 @@ int main() {
 
 		/* Read the data sent over by arduino */
 		uint8_t* readData = readByteData();
-		if (readData != NULL)
+		if (readData != NULL) {
 			if (sizeof(readData) > 0) {
-				leftButton->updateSubCompTexture(readData[3]*2);
-				botButton->updateSubCompTexture(readData[2]*2);
-				rightButton->updateSubCompTexture(readData[1]*2);
-				topButton->updateSubCompTexture(readData[0]*2);
+				updateButtons(leftButton, readData[3]);
+				updateButtons(botButton, readData[2]);
+				updateButtons(rightButton, readData[1]);
+				updateButtons(topButton, readData[0]);
 			}
 			free (readData);
+		}
+
+		targetButton->updateSubCompTexture(1);
 	}
 
 	/* Close GL context and any other GLFW resources */
@@ -151,6 +160,18 @@ int main() {
 /* -------------------------------------------------------------------------- */
 /* Helper functions */
 
+/* */
+void updateButtons(shared_ptr<Component> btn, int val) {
+	btn->updateSubCompTexture(val*2);
+
+	if (val == 1 && btn == targetButton) {
+		targetButton = availableButtons.front();
+		availableButtons.pop_front();
+		availableButtons.push_back(btn);
+	}
+}
+
+/* */
 void generateModels() {
 	/* Initialise Program for textured Objects */
 	shared_ptr<Program> texturedProgram = initProgram("assets/test_vs.glsl", "assets/test2_fs.glsl");
@@ -254,6 +275,11 @@ void generateModels() {
 
 	/* Companion cube */
 	companionCube = texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 0, 0.75f), cubeTexture, 0);
+
+	/* */
+	availableButtons.push_back(rightButton);
+	availableButtons.push_back(topButton);
+	availableButtons.push_back(botButton);
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
 	shared_ptr<Program> untexturedProgram = initProgram("assets/test2_vs.glsl", "assets/test_fs.glsl");
