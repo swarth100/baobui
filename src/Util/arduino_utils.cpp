@@ -26,27 +26,27 @@ void setupArduino() {
 	lowerLevel = make_shared<ReferencePoint>(lowerCenter, ReferencePoint::LOWER);
 
 	lowerLevel->attachPoint(make_shared<ArduinoPoint>(70, 25, 130, 55, ArduinoPoint::TOP));
-	lowerLevel->attachPoint(make_shared<ArduinoPoint>(95, 65, 90, 0, ArduinoPoint::RIGHT));
+	lowerLevel->attachPoint(make_shared<ArduinoPoint>(95, 55, 100, 10, ArduinoPoint::RIGHT));
 	lowerLevel->attachPoint(make_shared<ArduinoPoint>(110, 140, 80, 45, ArduinoPoint::BOT));
-	lowerLevel->attachPoint(make_shared<ArduinoPoint>(110, 70, 90, 100, ArduinoPoint::LEFT));
+	lowerLevel->attachPoint(make_shared<ArduinoPoint>(110, 55, 120, 90, ArduinoPoint::LEFT));
 
 	/* Middle level */
 	shared_ptr<ArduinoPoint> middleCenter = make_shared<ArduinoPoint>(70, 90, 20, 45, ArduinoPoint::CENTER);
 	middleLevel = make_shared<ReferencePoint>(middleCenter, ReferencePoint::MIDDLE);
 
 	middleLevel->attachPoint(make_shared<ArduinoPoint>(20, 10, 70, 55, ArduinoPoint::TOP));
-	middleLevel->attachPoint(make_shared<ArduinoPoint>(85, 70, 35, 0, ArduinoPoint::RIGHT));
+	middleLevel->attachPoint(make_shared<ArduinoPoint>(85, 70, 35, 10, ArduinoPoint::RIGHT));
 	middleLevel->attachPoint(make_shared<ArduinoPoint>(90, 140, 20, 45, ArduinoPoint::BOT));
-	middleLevel->attachPoint(make_shared<ArduinoPoint>(85, 75, 35, 100, ArduinoPoint::LEFT));
+	middleLevel->attachPoint(make_shared<ArduinoPoint>(85, 65, 35, 90, ArduinoPoint::LEFT));
 
 	/* Upper level */
 	shared_ptr<ArduinoPoint> upperCenter = make_shared<ArduinoPoint>(50, 100, 0, 45, ArduinoPoint::CENTER);
 	upperLevel = make_shared<ReferencePoint>(upperCenter, ReferencePoint::HIGHER);
 
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(0, 10, 50, 55, ArduinoPoint::TOP));
-	upperLevel->attachPoint(make_shared<ArduinoPoint>(60, 70, 20, 0, ArduinoPoint::RIGHT));
+	upperLevel->attachPoint(make_shared<ArduinoPoint>(60, 70, 20, 10, ArduinoPoint::RIGHT));
 	upperLevel->attachPoint(make_shared<ArduinoPoint>(90, 140, 0, 45, ArduinoPoint::BOT));
-	upperLevel->attachPoint(make_shared<ArduinoPoint>(60, 70, 20, 100, ArduinoPoint::LEFT));
+	upperLevel->attachPoint(make_shared<ArduinoPoint>(60, 70, 20, 90, ArduinoPoint::LEFT));
 }
 
 /* The following function creates a new ReferencePoint that holds the correct

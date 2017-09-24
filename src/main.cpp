@@ -50,9 +50,6 @@ int main() {
 	/* Set up the models in the virtual layout */
 	generateModels();
 
-	topButton->updateSubCompTexture(2);
-	leftButton->updateSubCompTexture(1);
-
 	/* Initialise the camera instance.
 	   Holds an instance of the view matrix. */
 	init_camera(0.0f, 0.0f, 10.0f, 2.0f);
@@ -137,6 +134,12 @@ int main() {
 		/* Read the data sent over by arduino */
 		uint8_t* readData = readByteData();
 		if (readData != NULL)
+			if (sizeof(readData) > 0) {
+				leftButton->updateSubCompTexture(readData[3]*2);
+				botButton->updateSubCompTexture(readData[2]*2);
+				rightButton->updateSubCompTexture(readData[1]*2);
+				topButton->updateSubCompTexture(readData[0]*2);
+			}
 			free (readData);
 	}
 
