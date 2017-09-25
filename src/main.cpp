@@ -36,7 +36,7 @@ int main() {
 	setupArduino();
 
 	/* Setup Serial port communication */
-	setupSerial("/dev/ttyACM0");
+	setupSerial("/dev/ttyACM1");
 
 	/* Set up the models in the virtual layout */
 	generateModels();
@@ -65,23 +65,18 @@ int main() {
 	/* Accept fragment if it closer to the camera than the former one */
 	glDepthFunc(GL_LESS);
 
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-  sf::CircleShape shape(100.f);
-  shape.setFillColor(sf::Color::Green);
+	sf::SoundBuffer buffer;
+  if (!buffer.loadFromFile("assets/audio/theme.wav")) {
+		fprintf(stderr, "error loading sound file into buffer");
+    exit (-1);
+	}
 
-  while (window.isOpen())
-  {
-      sf::Event event;
-      while (window.pollEvent(event))
-      {
-          if (event.type == sf::Event::Closed)
-              window.close();
-      }
+	sf::Sound sound;
+	sound.setBuffer(buffer);
+	sound.setLoop(true);
+	sound.setVolume(50);
+	sound.play();
 
-      window.clear();
-      window.draw(shape);
-      window.display();
-  }
 
 	/* Rendering loop: while window isn't closed */
 	while (!glfwWindowShouldClose(g_window)) {

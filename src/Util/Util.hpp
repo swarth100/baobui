@@ -4,6 +4,7 @@
 #include <GL/glew.h>		// include GLEW and new version of GL on Windows
 #include <GLFW/glfw3.h> // GLFW helper library
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
