@@ -26,6 +26,10 @@ shared_ptr<sf::Sound> backgroundTheme;
 shared_ptr<sf::Sound> buttonUp;
 shared_ptr<sf::Sound> buttonDown;
 shared_ptr<sf::Sound> fizzle;
+shared_ptr<sf::Sound> fizzleGlados;
+
+/* */
+list<shared_ptr<sf::Sound>> successSounds;
 
 /* List of active sound buffers. Sound buffers must be kept alive for the whole
    duration of the program or no audio will be played */
@@ -88,10 +92,12 @@ void updateButtonData(uint8_t* readData) {
 			if (readData[4]) {
 				if (!isCubeFizzled) {
 					fizzle->play();
+					fizzleGlados->play();
+
+					/* Make the cube drop from the ceiling */
+					setCubePos(make_shared<Point>(0, 10, 15));
+					isCubeFizzled = true;
 				}
-				/* Make the cube drop from the ceiling */
-				setCubePos(make_shared<Point>(0, 10, 15));
-				isCubeFizzled = true;
 			} else {
 				isCubeFizzled = false;
 			}
@@ -130,6 +136,11 @@ void updateButtons(shared_ptr<Component> btn, int val) {
 		targetButton = availableButtons.front();
 		availableButtons.pop_front();
 		availableButtons.push_back(btn);
+
+		shared_ptr<sf::Sound> successAudioClip = successSounds.front();
+		successSounds.pop_front();
+		successAudioClip->play();
+		successSounds.push_back(successAudioClip);
 	}
 }
 
@@ -266,7 +277,15 @@ void initSound() {
 	/* */
 	buttonDown = loadSound("assets/audio/buttonDown.wav", 50);
 
+	/* */
 	fizzle = loadSound("assets/audio/fizzle.wav", 100);
+	fizzleGlados = loadSound("assets/audio/fizzleCubeComplete.wav", 100);
+
+	/* */
+	successSounds.push_back(loadSound("assets/audio/testing01.wav", 100));
+	successSounds.push_back(loadSound("assets/audio/testing02.wav", 100));
+	successSounds.push_back(loadSound("assets/audio/testing03.wav", 100));
+	successSounds.push_back(loadSound("assets/audio/testResults01.wav", 100));
 }
 
 /* */

@@ -26,7 +26,6 @@ int g_gl_height = 960;
 /* Window instance */
 GLFWwindow *g_window = NULL;
 
-
 int main() {
 	restart_gl_log();
 
@@ -42,13 +41,8 @@ int main() {
 	/* Set up the models in the virtual layout */
 	generateModels();
 
-	/* */
+	/* Initialise all sound buffers and elements */
 	initSound();
-
-	/*
-	shared_ptr<sf::Sound> backgroundTheme = loadSound("assets/audio/theme.wav", 25);
-	backgroundTheme->setLoop(true);
-  backgroundTheme->play(); */
 
 	/* Initialise the camera instance.
 	   Holds an instance of the view matrix. */
