@@ -75,14 +75,26 @@ void updateButtonData(uint8_t* readData) {
 
 /* */
 void updateButtons(shared_ptr<Component> btn, int val) {
-	btn->updateSubCompTexture(val*2);
+
+	int textureVal = val*2;
+
+	if (textureVal != btn->getTextureIndex()) {
+		switch (btn->getTextureIndex()) {
+			case 0:
+				buttonUp->play();
+				break;
+			case 2:
+				buttonDown->play();
+				break;
+		}
+	}
+
+	btn->updateSubCompTexture(textureVal);
 
 	if (val == 1 && btn == targetButton) {
 		targetButton = availableButtons.front();
 		availableButtons.pop_front();
 		availableButtons.push_back(btn);
-
-		buttonDown->play();
 	}
 }
 

@@ -70,6 +70,8 @@ void Component::addSubComponent(shared_ptr<Component> newSub) {
 
 /* */
 void Component::updateSubCompTexture(int newTextureIndex) {
+  this->setTextureIndex(newTextureIndex);
+
   list<shared_ptr<Component>>::iterator it;
   for (it = subComponentList.begin(); it != subComponentList.end(); ++it){
     shared_ptr<Component> component = (*it);
