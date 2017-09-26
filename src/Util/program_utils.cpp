@@ -3,77 +3,93 @@
 /* List of active programs to be rendered */
 list<shared_ptr<Program>> programs;
 
-/* */
+/* Fields holding instances of the button components. The components trigger
+   texture updates and are linked to sound effects */
 shared_ptr<Component> topButton;
 shared_ptr<Component> rightButton;
 shared_ptr<Component> botButton;
 shared_ptr<Component> leftButton;
 bool isCubeFizzled = false;
 
-/* */
+/* Targetbutton stores the button chosen as a target for the cube */
 shared_ptr<Component> targetButton;
+
+/* The availableButtons list is iterated across when selecting a new button to
+   select as a targetButton */
 list<shared_ptr<Component>> availableButtons;
 
-/* */
+/* Holds a refererence to the companion cube object moved by BAoBOS */
 shared_ptr<Component> companionCube;
 
-/* */
+/* Sound components */
 shared_ptr<sf::Sound> backgroundTheme;
 shared_ptr<sf::Sound> buttonUp;
 shared_ptr<sf::Sound> buttonDown;
 shared_ptr<sf::Sound> fizzle;
 
-/* */
+/* List of active sound buffers. Sound buffers must be kept alive for the whole
+   duration of the program or no audio will be played */
 list<shared_ptr<sf::SoundBuffer>> buffer_list;
 
-/* */
+/* Create a new program instance, initialise it and return it */
 shared_ptr<Program> initProgram(const char* vs, const char* fs) {
 	shared_ptr<Program> program = make_shared<Program>(vs, fs);
 
+	/* Program is added to the list of active programs */
 	programs.push_back(program);
 
 	return program;
 }
 
-/* */
+/* Given a uniform's name it attaches it to all available programs */
 void attachUniforms(const char* name, GLfloat* uniform) {
 	list<shared_ptr<Program>>::iterator it;
+
+	/* Iterate through all available programs */
   for (it = programs.begin(); it != programs.end(); ++it){
 		shared_ptr<Program> program = (*it);
 
+		/* Attach the uniform to the program */
 		program->attachUniform(name, uniform);
 	}
 }
 
-/* */
+/* Issues a draw request to all programs */
 void drawAllPrograms() {
 	list<shared_ptr<Program>>::iterator it;
+
+	/* Iterate through all programs */
   for (it = programs.begin(); it != programs.end(); ++it){
 		shared_ptr<Program> program = (*it);
 
+		/* Issue draw requests to all programs */
 		program->draw();
 	}
 }
 
-/* */
+/* Updates the companion cube's position given an elapsed amount of seconds */
 void updateCompanionCube(float elapsed_seconds) {
 	companionCube->setPos(getCubePos(elapsed_seconds));
 }
 
-/* */
+/* Updates the button components based on the arduino input data */
 void updateButtonData(uint8_t* readData) {
 	if (readData != NULL) {
+		/* Only read the data if it's of non-zero size */
 		if (sizeof(readData) > 0) {
 			updateButtons(leftButton, readData[3]);
 			updateButtons(botButton, readData[2]);
 			updateButtons(rightButton, readData[1]);
 			updateButtons(topButton, readData[0]);
 
-			/* */
+			/* At data index 4 is located the detection of the contraption's floor.
+			 	 When it detects a hit it must fizzle the companion cube and display it
+				 back in the origin */
 			if (readData[4]) {
 				if (!isCubeFizzled) {
 					fizzle->play();
 				}
+				/* Make the cube drop from the ceiling */
 				setCubePos(make_shared<Point>(0, 10, 15));
 				isCubeFizzled = true;
 			} else {
@@ -83,14 +99,17 @@ void updateButtonData(uint8_t* readData) {
 		free (readData);
 	}
 
+	/* Set the current target cube's texture to blue */
 	targetButton->updateSubCompTexture(1);
 }
 
-/* */
+/* Handle individual texture updates for buttons */
 void updateButtons(shared_ptr<Component> btn, int val) {
 
 	int textureVal = val*2;
 
+	/* Change the texture of selected components to orange and plays selection
+	  sound clip */
 	if ((textureVal != btn->getTextureIndex()) || (btn->getTextureIndex() == 1 && textureVal == 2))  {
 		switch (textureVal) {
 			case 0:
@@ -103,8 +122,10 @@ void updateButtons(shared_ptr<Component> btn, int val) {
 		}
 	}
 
+	/* Make texture updates cascade through the Component */
 	btn->updateSubCompTexture(textureVal);
 
+	/* Minimal game logic to switch around selected target cubes */
 	if (val == 1 && btn == targetButton) {
 		targetButton = availableButtons.front();
 		availableButtons.pop_front();
