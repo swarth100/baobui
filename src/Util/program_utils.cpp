@@ -27,6 +27,7 @@ shared_ptr<sf::Sound> buttonUp;
 shared_ptr<sf::Sound> buttonDown;
 shared_ptr<sf::Sound> fizzle;
 shared_ptr<sf::Sound> fizzleGlados;
+shared_ptr<sf::Sound> introGlados;
 
 /* */
 list<shared_ptr<sf::Sound>> successSounds;
@@ -266,6 +267,10 @@ void generateModels() {
 
 /* */
 void initSound() {
+	/* */
+	introGlados = loadSound("assets/audio/introComplete.wav", 100);
+	introGlados->play();
+
 	/* */
 	backgroundTheme = loadSound("assets/audio/theme.wav", 25);
 	backgroundTheme->setLoop(true);

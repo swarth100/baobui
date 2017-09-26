@@ -32,7 +32,7 @@ void init_camera(float x, float y, float z, float speed) {
   lockCamera = true;
   draggingCube = false;
 
-  cubePos = make_shared<Point>(0, 10, 0);
+  cubePos = make_shared<Point>(0, 10, 50);
 
   extensionAngle = 80;
   extensionSpeed = 25.0f;
