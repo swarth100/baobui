@@ -32,6 +32,10 @@ GLfloat* Component::getDeltaPos() {
   return this->deltapos;
 }
 
+int Component::getTextureIndex() {
+  return this->textureIndex;
+}
+
 /* Adds a type 2 Vbo */
 void Component::addVbo2(GLfloat* array, int size, int vecNum) {
   this->addVbo(array, size, 2, vecNum);
@@ -66,6 +70,8 @@ void Component::addSubComponent(shared_ptr<Component> newSub) {
 
 /* */
 void Component::updateSubCompTexture(int newTextureIndex) {
+  this->setTextureIndex(newTextureIndex);
+
   list<shared_ptr<Component>>::iterator it;
   for (it = subComponentList.begin(); it != subComponentList.end(); ++it){
     shared_ptr<Component> component = (*it);

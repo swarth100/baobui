@@ -17,6 +17,7 @@ public:
   /* Getters for protected fields */
   GLuint getVao();
   GLuint getTexture();
+  int getTextureIndex();
   int getSize();
   GLenum getType();
   GLfloat* getDeltaPos();
