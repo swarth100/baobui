@@ -32,6 +32,10 @@ GLfloat* Component::getDeltaPos() {
   return this->deltapos;
 }
 
+int Component::getTextureIndex() {
+  return this->textureIndex;
+}
+
 /* Adds a type 2 Vbo */
 void Component::addVbo2(GLfloat* array, int size, int vecNum) {
   this->addVbo(array, size, 2, vecNum);

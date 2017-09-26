@@ -20,6 +20,9 @@ void updateCompanionCube(float);
 
 void generateModels();
 
+void initSound();
+shared_ptr<sf::Sound> loadSound(const char*, int);
+
 void updateButtons(shared_ptr<Component>, int);
 
 #endif

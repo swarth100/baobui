@@ -17,6 +17,14 @@ list<shared_ptr<Component>> availableButtons;
 shared_ptr<Component> companionCube;
 
 /* */
+shared_ptr<sf::Sound> backgroundTheme;
+shared_ptr<sf::Sound> buttonUp;
+shared_ptr<sf::Sound> buttonDown;
+
+/* */
+list<shared_ptr<sf::SoundBuffer>> buffer_list;
+
+/* */
 shared_ptr<Program> initProgram(const char* vs, const char* fs) {
 	shared_ptr<Program> program = make_shared<Program>(vs, fs);
 
@@ -73,6 +81,8 @@ void updateButtons(shared_ptr<Component> btn, int val) {
 		targetButton = availableButtons.front();
 		availableButtons.pop_front();
 		availableButtons.push_back(btn);
+
+		buttonDown->play();
 	}
 }
 
@@ -187,10 +197,41 @@ void generateModels() {
 	availableButtons.push_back(botButton);
 
 	targetButton = leftButton;
+	topButton->updateSubCompTexture(2);
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
 	shared_ptr<Program> untexturedProgram = initProgram("assets/test2_vs.glsl", "assets/test_fs.glsl");
 
 	/* Grid element */
 	//untexturedProgram->generateGrid(100, 1.0f);
+}
+
+/* */
+void initSound() {
+	/* */
+	backgroundTheme = loadSound("assets/audio/theme.wav", 25);
+	backgroundTheme->setLoop(true);
+	backgroundTheme->play();
+
+	/* */
+	buttonUp = loadSound("assets/audio/buttonUp.wav", 50);
+
+	/* */
+	buttonDown = loadSound("assets/audio/buttonDown.wav", 50);
+}
+
+/* */
+shared_ptr<sf::Sound> loadSound(const char* path, int volume) {
+	shared_ptr<sf::SoundBuffer> buffer = make_shared<sf::SoundBuffer>();
+  if (!buffer->loadFromFile(path)) {
+		fprintf(stderr, "error loading sound file into buffer: %s", path);
+    exit (-1);
+	}
+
+	buffer_list.push_back(buffer);
+
+	shared_ptr<sf::Sound> sound = make_shared<sf::Sound>();;
+	sound->setBuffer(*buffer);
+	sound->setVolume(volume);
+	return sound;
 }

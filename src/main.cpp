@@ -26,6 +26,7 @@ int g_gl_height = 960;
 /* Window instance */
 GLFWwindow *g_window = NULL;
 
+
 int main() {
 	restart_gl_log();
 
@@ -36,10 +37,18 @@ int main() {
 	setupArduino();
 
 	/* Setup Serial port communication */
-	setupSerial("/dev/ttyACM1");
+	setupSerial("/dev/ttyACM0");
 
 	/* Set up the models in the virtual layout */
 	generateModels();
+
+	/* */
+	initSound();
+
+	/*
+	shared_ptr<sf::Sound> backgroundTheme = loadSound("assets/audio/theme.wav", 25);
+	backgroundTheme->setLoop(true);
+  backgroundTheme->play(); */
 
 	/* Initialise the camera instance.
 	   Holds an instance of the view matrix. */
@@ -54,7 +63,6 @@ int main() {
 	/* Attach the newly created uniforms to all programs */
 	attachUniforms("view", view_mat.m);
 	attachUniforms("proj", proj_mat.m);
-	attachUniforms("bob", view_mat.m);
 
 	//glEnable( GL_CULL_FACE ); // cull face
 	//glCullFace( GL_BACK );		// cull back face
@@ -64,19 +72,6 @@ int main() {
 	glEnable(GL_DEPTH_TEST);
 	/* Accept fragment if it closer to the camera than the former one */
 	glDepthFunc(GL_LESS);
-
-	sf::SoundBuffer buffer;
-  if (!buffer.loadFromFile("assets/audio/theme.wav")) {
-		fprintf(stderr, "error loading sound file into buffer");
-    exit (-1);
-	}
-
-	sf::Sound sound;
-	sound.setBuffer(buffer);
-	sound.setLoop(true);
-	sound.setVolume(50);
-	sound.play();
-
 
 	/* Rendering loop: while window isn't closed */
 	while (!glfwWindowShouldClose(g_window)) {
