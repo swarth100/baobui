@@ -154,6 +154,10 @@ shared_ptr<Point> getCubePos(float elapsed_seconds) {
   return cubePos;
 }
 
+void setCubePos(shared_ptr<Point> newPos) {
+  cubePos = newPos;
+}
+
 /* */
 mat4 getTranslationMatrix() {
   mat4 T = translate( identity_mat4(), vec3(-cam_pos[0], -cam_pos[1], -cam_pos[2]));

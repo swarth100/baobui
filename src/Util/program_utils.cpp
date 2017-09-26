@@ -8,6 +8,7 @@ shared_ptr<Component> topButton;
 shared_ptr<Component> rightButton;
 shared_ptr<Component> botButton;
 shared_ptr<Component> leftButton;
+bool isCubeFizzled = false;
 
 /* */
 shared_ptr<Component> targetButton;
@@ -20,6 +21,7 @@ shared_ptr<Component> companionCube;
 shared_ptr<sf::Sound> backgroundTheme;
 shared_ptr<sf::Sound> buttonUp;
 shared_ptr<sf::Sound> buttonDown;
+shared_ptr<sf::Sound> fizzle;
 
 /* */
 list<shared_ptr<sf::SoundBuffer>> buffer_list;
@@ -66,6 +68,17 @@ void updateButtonData(uint8_t* readData) {
 			updateButtons(botButton, readData[2]);
 			updateButtons(rightButton, readData[1]);
 			updateButtons(topButton, readData[0]);
+
+			/* */
+			if (readData[4]) {
+				if (!isCubeFizzled) {
+					fizzle->play();
+				}
+				setCubePos(make_shared<Point>(0, 10, 15));
+				isCubeFizzled = true;
+			} else {
+				isCubeFizzled = false;
+			}
 		}
 		free (readData);
 	}
@@ -78,10 +91,11 @@ void updateButtons(shared_ptr<Component> btn, int val) {
 
 	int textureVal = val*2;
 
-	if (textureVal != btn->getTextureIndex()) {
-		switch (btn->getTextureIndex()) {
+	if ((textureVal != btn->getTextureIndex()) || (btn->getTextureIndex() == 1 && textureVal == 2))  {
+		switch (textureVal) {
 			case 0:
-				buttonUp->play();
+				if(btn->getTextureIndex() != 1)
+					buttonUp->play();
 				break;
 			case 2:
 				buttonDown->play();
@@ -230,6 +244,8 @@ void initSound() {
 
 	/* */
 	buttonDown = loadSound("assets/audio/buttonDown.wav", 50);
+
+	fizzle = loadSound("assets/audio/fizzle.wav", 100);
 }
 
 /* */

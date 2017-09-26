@@ -10,6 +10,7 @@ void init_camera(float, float, float, float);
 
 shared_ptr<Point> getCamera();
 shared_ptr<Point> getCubePos(float);
+void setCubePos(shared_ptr<Point>);
 
 mat4 getTranslationMatrix();
 mat4 getProjectionMatrix();
