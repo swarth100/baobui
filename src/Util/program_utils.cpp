@@ -27,8 +27,10 @@ shared_ptr<sf::Sound> buttonUp;
 shared_ptr<sf::Sound> buttonDown;
 shared_ptr<sf::Sound> fizzle;
 shared_ptr<sf::Sound> fizzleGlados;
+shared_ptr<sf::Sound> introGlados;
 
-/* */
+/* List of sounds associated with successful step-by-step pacing of the test
+   chamber. */
 list<shared_ptr<sf::Sound>> successSounds;
 
 /* List of active sound buffers. Sound buffers must be kept alive for the whole
@@ -36,7 +38,8 @@ list<shared_ptr<sf::Sound>> successSounds;
 list<shared_ptr<sf::SoundBuffer>> buffer_list;
 
 /* Create a new program instance, initialise it and return it */
-shared_ptr<Program> initProgram(const char* vs, const char* fs) {
+shared_ptr<Program>
+initProgram(const char* vs, const char* fs) {
 	shared_ptr<Program> program = make_shared<Program>(vs, fs);
 
 	/* Program is added to the list of active programs */
@@ -46,7 +49,8 @@ shared_ptr<Program> initProgram(const char* vs, const char* fs) {
 }
 
 /* Given a uniform's name it attaches it to all available programs */
-void attachUniforms(const char* name, GLfloat* uniform) {
+void
+attachUniforms(const char* name, GLfloat* uniform) {
 	list<shared_ptr<Program>>::iterator it;
 
 	/* Iterate through all available programs */
@@ -133,43 +137,61 @@ void updateButtons(shared_ptr<Component> btn, int val) {
 
 	/* Minimal game logic to switch around selected target cubes */
 	if (val == 1 && btn == targetButton) {
+		/* Pops the first available button from the list and pushes the current (now
+	     old target) at the end. This way the code permanently cycles through
+			 possible button choices */
 		targetButton = availableButtons.front();
 		availableButtons.pop_front();
 		availableButtons.push_back(btn);
 
+		/* Audio clips are cycled through in a similar fascion. */
 		shared_ptr<sf::Sound> successAudioClip = successSounds.front();
 		successSounds.pop_front();
 		successAudioClip->play();
+
+		/* The current playing audio clip can also be re-pushed onto the list */
 		successSounds.push_back(successAudioClip);
 	}
 }
 
-/* */
+/* General function to generate all the virtual models present in the world.
+   It operates using a number of textures and two main programs.
+	 The main textured program will accept Components linked with textures.
+	 The secondary unntextured program is mainly used for debugging purposes.
+	 - - -
+	 Certain generated Components are linked together into Buttons.
+	 Buttons have common functionality as they share texture indexes. A change in
+	 texture index is cascaded through the entire button and all of its Components
+	 making texture-switching easier. */
 void generateModels() {
 	/* Initialise Program for textured Objects */
 	shared_ptr<Program> texturedProgram = initProgram("assets/test_vs.glsl", "assets/test2_fs.glsl");
 
-	/* */
+	/* Initialises companion cube texture */
 	shared_ptr<Texture> cubeTexture = make_shared<Texture>();
 	cubeTexture->addTexture("assets/img/companionCube.png");
 
-	/* */
+	/* Initialises floor textures for wall components */
 	shared_ptr<Texture> wallTexture = make_shared<Texture>();
 	wallTexture->addTexture("assets/img/grid3.png");
 	wallTexture->addTexture("assets/img/grid3b.png");
 
-	/* */
+	/* Initialises textures for icons displayed on the starting pod */
 	shared_ptr<Texture> iconTexture = make_shared<Texture>();
 	iconTexture->addTexture("assets/img/Companion-Cube-portal-2.jpg");
 	iconTexture->addTexture("assets/img/Chamber_icon_cake_on.png");
 
-	/* */
+	/* Button textures evaluate the three different states of a button.
+	   The gray texture is to be displayed in its inactive state.
+		 The blue texture is to be displayed when it's selected as the target.
+		 The orange texture indicates selection (triggered by hardware) */
 	shared_ptr<Texture> buttonTexture = make_shared<Texture>();
 	buttonTexture->addTexture("assets/img/grid0Gray.png");
 	buttonTexture->addTexture("assets/img/grid0Blue.png");
 	buttonTexture->addTexture("assets/img/grid0Orange.png");
 
-	/* */
+	/* Following a similar fascion from the buttons, signal-light textures also
+	   come in three colours */
 	shared_ptr<Texture> signalTexture = make_shared<Texture>();
 	signalTexture->addTexture("assets/img/portalSignalLightGray.png");
 	signalTexture->addTexture("assets/img/portalSignalLightBlue.png");
@@ -249,57 +271,78 @@ void generateModels() {
 	/* Companion cube */
 	companionCube = texturedProgram->generateTexturedPrism(2, 2, 2, make_shared<Point>(0, 0, 0.75f), cubeTexture, 0);
 
-	/* */
+	/* All initialised buttons are pushed onto the buttons list */
 	availableButtons.push_back(rightButton);
 	availableButtons.push_back(topButton);
 	availableButtons.push_back(botButton);
 
+	/* The top button is chosen as the first selected one.
+	   Its texture is also set manually.
+		 This is done to prevent the program from issuing a buttonDown sound when
+		 retrieving the selected status data from arduino. */
 	targetButton = leftButton;
 	topButton->updateSubCompTexture(2);
 
 	/* Initialise Program for blank objects. Templates and/or Grid */
 	shared_ptr<Program> untexturedProgram = initProgram("assets/test2_vs.glsl", "assets/test_fs.glsl");
 
-	/* Grid element */
+	/* Grid element --DEBUG */
 	//untexturedProgram->generateGrid(100, 1.0f);
 }
 
-/* */
+/* Initialises all sound components.
+   Sound instances must be kept in memory for the whole duration of the play.
+	 The following elements are all initialised at the top of this file.
+	 TODO: Should be refactored into a seperate structure */
 void initSound() {
-	/* */
+	/* Intro sounds are played when entering the game.
+	   GLaDOS voicelines are always played at full volume. */
+	introGlados = loadSound("assets/audio/introComplete.wav", 100);
+	introGlados->play();
+
+	/* The portal theme song will be played in a loop constantly at a lower vol */
 	backgroundTheme = loadSound("assets/audio/theme.wav", 25);
 	backgroundTheme->setLoop(true);
 	backgroundTheme->play();
 
-	/* */
+	/* ButtonUp and ButtonDown sunds are played when triggered by the arduino
+	   board. Placing the physical companionCUube onto one of the platforms will
+		 trigger the cound to be played. */
 	buttonUp = loadSound("assets/audio/buttonUp.wav", 50);
-
-	/* */
 	buttonDown = loadSound("assets/audio/buttonDown.wav", 50);
 
-	/* */
+	/* Fizzleing occurs when touching the bottom base element.
+	   GLaDOS voicelines are played concurrently. */
 	fizzle = loadSound("assets/audio/fizzle.wav", 100);
 	fizzleGlados = loadSound("assets/audio/fizzleCubeComplete.wav", 100);
 
-	/* */
+	/* Success Sounds are played in a loop upon successful placemenets of the
+	   companionCube onto one of the target Platforms */
 	successSounds.push_back(loadSound("assets/audio/testing01.wav", 100));
 	successSounds.push_back(loadSound("assets/audio/testing02.wav", 100));
 	successSounds.push_back(loadSound("assets/audio/testing03.wav", 100));
 	successSounds.push_back(loadSound("assets/audio/testResults01.wav", 100));
 }
 
-/* */
+/* loadSouns is a helper routine to load a .wav file from memory given its path.
+   Paths must be relative to the callee of the function. */
 shared_ptr<sf::Sound> loadSound(const char* path, int volume) {
 	shared_ptr<sf::SoundBuffer> buffer = make_shared<sf::SoundBuffer>();
-  if (!buffer->loadFromFile(path)) {
+
+	/* Error handling */
+	if (!buffer->loadFromFile(path)) {
 		fprintf(stderr, "error loading sound file into buffer: %s", path);
     exit (-1);
 	}
 
+	/* Buffers must be kept in memory or the audio stored in them cannot be played. */
 	buffer_list.push_back(buffer);
 
+	/* A new sound object is initialised, linked to the buffer and returned */
 	shared_ptr<sf::Sound> sound = make_shared<sf::Sound>();;
 	sound->setBuffer(*buffer);
+
+	/* Sound volume is set to the provided value */
 	sound->setVolume(volume);
 	return sound;
 }

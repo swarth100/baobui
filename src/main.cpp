@@ -46,7 +46,7 @@ int main() {
 
 	/* Initialise the camera instance.
 	   Holds an instance of the view matrix. */
-	init_camera(0.0f, 0.0f, 10.0f, 2.0f);
+	init_camera(0.0f, 0.0f, 15.0f, 2.0f);
 
 	/* Retrieve the translation matrix from the initialised camera */
 	mat4 view_mat = getTranslationMatrix();
