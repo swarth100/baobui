@@ -246,7 +246,7 @@ mat4 getTranslationMatrix() {
   mat4 T = translate( identity_mat4(), vec3(-cam_pos[0], -cam_pos[1], -cam_pos[2]));
 	mat4 Rz = rotate_z_deg(identity_mat4(), -cam_yaw);
   mat4 Rx = rotate_x_deg(identity_mat4(), -cam_roll);
-	mat4 view_mat = Rx * Ry * T;
+	mat4 view_mat = Rx * Rz * T;
 
   return view_mat;
 }
